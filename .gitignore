@@ -58,4 +58,10 @@ sysinfo.txt
 # Crashlytics generated file
 crashlytics-build.properties
 
+# IntelliJ
+
+.idea
+.idea/
+.idea/**
+
 .DS_STORE
