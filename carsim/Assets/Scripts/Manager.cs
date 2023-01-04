@@ -9,38 +9,45 @@ using System.Net.Sockets;
 using System.Text;
 using Json.Net;
 
-public class Blocklist
-{
-    public int thisid;
-    public float[] randoms;
-    
-}
-     
-
 public class Manager : MonoBehaviour
 {
-	//arena coordinates: (0, 0) (0, 10) (20,10) (20, 0)
+	// arena coordinates: (0, 0) (0, 10) (20,10) (20, 0)
 
+	// Game objects
 	public GameObject vehicle;//holds bot vehicle			
-	public GameObject obsticalblue;
-	public GameObject obsticalred;
-	public bool loadobsticals = true;
+
+	// initialize obstacle Map
+	public ObstacleMap obstacleMap = new();
+
+
+	// generate map
+	public MapType mapTypeGenerateMap = MapType.twoGoalLanes;
+
+
+	// load obstacle Map
+	private bool loadObstacles = false;
+	public string loadObstacleMapFilePath = ".";
+
+	// save map if generated
+	private bool saveObstacles = false;
+	public string saveObstacleMapFilePath = ".";
+
+
+
 	public bool humanpilot = false;
-	public int obsticalcount;
-	public int botcount;
 	public int port;
-	public int thisid;
+	public int idOfCurrentRun;
 	public string adress;
 
 	private int startport;
-	public string savforblockconfig = ".";
 	public float maxx;
 	public float minx;
 	public float maxy;
 	public float miny;
 	private List<Bot> bot;
-	private List<UnityEngine.Object> blocks = new List<UnityEngine.Object>();
 	private string result;
+
+	private int numberOfBots = 10;
 	private bool ENDOFGAME = false;
 	private bool dataready = false;
 	private bool closeconnect = false;
@@ -88,8 +95,8 @@ public class Manager : MonoBehaviour
 			ENDOFGAME = false;
 		}
 		if (shuffle){
-			if (blocks.Count >0 ){
-				destroyblocks();
+			if (obstacleMap.obstacles.Count >0 ){
+				obstacleMap.DestroyObstacles();
 			}
 			initblock();
 			shuffle = false;
@@ -136,55 +143,34 @@ public class Manager : MonoBehaviour
 		return random;
 		
 	}
-	
-	float[] getblocksfromfile(){
-		string fullPath = savforblockconfig+thisid.ToString()+".json";
-		if (File.Exists(fullPath)){
-			string content = File.ReadAllText(fullPath);
-			print(content);
-			Blocklist blocklist = JsonUtility.FromJson<Blocklist>(content);
-			return blocklist.randoms;
-		}else{
-			float[] randoms = getrandom(obsticalcount);
-			Blocklist blocklist = new Blocklist{thisid = thisid, randoms = randoms};
-			string json =  JsonNet.Serialize(blocklist);
-            File.WriteAllText(fullPath, json);
-            return randoms;
-		}
-
-
-
-    }
     
     void initblock(){
-		float[] randoms;
-		if (loadobsticals){
-			randoms = getblocksfromfile();
-		}else{
-			randoms = getrandom(obsticalcount);
-			Blocklist blocklist = new Blocklist{thisid = thisid, randoms = randoms};
-			string fullPath = savforblockconfig+thisid.ToString()+".json";
-			string json =  JsonNet.Serialize(blocklist);
-			File.WriteAllText(fullPath,json); 
+		ObstacleList obstacleList;
+
+		// load a already generated map
+		if (loadObstacles)
+		{
+            obstacleList = this.obstacleMap.LoadObastacleMap(this.loadObstacleMapFilePath, this.idOfCurrentRun);
 		}
-		thisid ++;
-		for (int i = 1; i < obsticalcount-1; i++){
+		else
+		{
 
-            // vector bounds: (0, 15 , 0 ,  10 - 0)
+			// generate a new map with new obstacle, decide which type of map should be generated
+			obstacleList = this.obstacleMap.GenerateObstacleMap(this.mapTypeGenerateMap, this.idOfCurrentRun);
 
-			//left row
-            if (i % 2 == 0) {
-				this.blocks.Add(Instantiate(this.obsticalblue, new Vector3(i*2, (float)1.2, 1), new Quaternion(0, 0, 1, 0)));
-				this.blocks.Add(Instantiate(this.obsticalred, new Vector3(i*2, (float)1.2, 3), new Quaternion(0, 0, 1, 0)));
-			}
-			// right row
-			else
+			if (this.saveObstacles)
             {
-				this.blocks.Add(Instantiate(this.obsticalblue, new Vector3(i*2, (float)1.2, 7), new Quaternion(0, 0, 1, 0)));
-				this.blocks.Add(Instantiate(this.obsticalred, new Vector3(i*2, (float)1.2, 10), new Quaternion(0, 0, 1, 0)));
+				this.obstacleMap.SaveObstacleMap(this.saveObstacleMapFilePath,
+					this.idOfCurrentRun, obstacleList);
+
 			}
-			
 		}
+
+		// intantiate real objects in unity
+		this.obstacleMap.IntantiateObstacles(obstacleList);
+
+		idOfCurrentRun ++;
+
 	}
     
     void getresults(){
@@ -211,18 +197,11 @@ public class Manager : MonoBehaviour
 		}
 	}
     
-    void destroyblocks(){
-		for (int i = 0; i< blocks.Count; i++){
-			GameObject.Destroy(blocks[i]);
-		}
-	}
-    
-    
     
     void initbot()
     {
 		bot = new List<Bot>();
-		for (int i = 0; i < this.botcount; i++){
+		for (int i = 0; i < this.numberOfBots; i++){
 			Bot b  = Instantiate(this.vehicle, new Vector3(19,0,5), Quaternion.Euler(0f, -90f, 0f)).GetComponent(typeof(Bot)) as Bot;
 			if (humanpilot){
 				b.sethumandriver(true);
@@ -276,7 +255,7 @@ public class Manager : MonoBehaviour
 				}
 				string[] texts = text.Split(";");
 				if (texts[0]=="BOTCOUNT"){
-					botcount = int.Parse(texts[1]);
+					this.numberOfBots = int.Parse(texts[1]);
 					continue;
 				}
 				if (texts[0] == "EOG"){

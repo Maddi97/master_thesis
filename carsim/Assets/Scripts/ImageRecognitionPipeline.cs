@@ -11,7 +11,7 @@ using System.Drawing;
 public class ImageRecognitionPipeline
 {
    
-    // find contours of all red, blue obstacles and boundery in image
+    // find contours of all red, blue obstacles and boundery in image                           h
     public List<List<Rectangle>> getObstaclePosition(byte[] image)
     {
         var imageDecoded = new Emgu.CV.Mat();

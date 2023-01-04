@@ -1306,6 +1306,55 @@ Transform:
   m_Father: {fileID: 685248604}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &84630723
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 84630725}
+  - component: {fileID: 84630724}
+  m_Layer: 0
+  m_Name: ObstacleMapManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &84630724
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 84630723}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0794c99f039f4b0cb4e6b904c4f990e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  obstacles: []
+  obstacleblue: {fileID: 2786694837747256956, guid: 681200f7d15524e8589d7a28c0376f42,
+    type: 3}
+  obstaclered: {fileID: 4860177610794674011, guid: 3e11cd3ae44c8436d85c818e43d4b542,
+    type: 3}
+--- !u!4 &84630725
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 84630723}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 19.21, y: 0, z: 4.52}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &84786302
 GameObject:
   m_ObjectHideFlags: 0
@@ -33400,22 +33449,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   vehicle: {fileID: 6793220110095211619, guid: f606a5942af95440fb4b3082a4f4c9f6, type: 3}
-  obsticalblue: {fileID: 2786694837747256956, guid: 681200f7d15524e8589d7a28c0376f42,
-    type: 3}
-  obsticalred: {fileID: 4860177610794674011, guid: 3e11cd3ae44c8436d85c818e43d4b542,
-    type: 3}
-  loadobsticals: 1
+  obstacleMap: {fileID: 84630724}
+  mapTypeGenerateMap: 2
+  loadObstacleMapFilePath: .
+  saveObstacleMapFilePath: .
   humanpilot: 0
-  obsticalcount: 10
-  botcount: 1
   port: 9653
-  thisid: 252
+  idOfCurrentRun: 0
   adress: 127.0.0.1
-  savforblockconfig: .
-  maxx: 23
-  minx: -23
-  maxy: 78
-  miny: -19
+  maxx: 20
+  minx: 0
+  maxy: 20
+  miny: 0
 --- !u!4 &1776526685
 Transform:
   m_ObjectHideFlags: 0
