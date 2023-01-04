@@ -57,6 +57,7 @@ public class Manager : MonoBehaviour
 		if (humanpilot){
 			initblock();
 			initbot();
+
 			
 		}else{
 			Application.targetFrameRate = 5;

@@ -293,6 +293,7 @@ public class Bot : MonoBehaviour
 	
 	private void UDPstuff(){
 		client = new UdpClient(port);
+		ImageRecognitionPipeline ImageRecognition = new ImageRecognitionPipeline();
 		byte[] startcode = System.Text.Encoding.UTF8.GetBytes("LosGehtsKleinerHase");
 		byte[] endcode = System.Text.Encoding.UTF8.GetBytes("ZuEndekleinerHase");
 		byte[] eog = System.Text.Encoding.UTF8.GetBytes("ENDOFGAME");
@@ -308,6 +309,7 @@ public class Bot : MonoBehaviour
 					break;
 				}
 				if (newpic){
+					// ImageRecognition.getObstaclePosition(picture);
 					int len = picture.Length;
 					//print (len.ToString());
 					client.Send(startcode,startcode.Length, anyIP);
