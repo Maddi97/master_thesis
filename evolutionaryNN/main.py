@@ -1,7 +1,4 @@
-# This is a sample Python script.
 
-# Press ⌃R to execute it or replace it with your code.
-# Press Double ⇧ to search everywhere for classes, files, tool windows, actions, and settings.
 import csv
 
 import NeuralNetwork
@@ -17,7 +14,7 @@ def sortfunction(neuralnet: NeuralNetwork.NeuralNet):
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    neuralnet = [[4, 3, 4], [4, 3, 4], [4, 3, 4], [12, 4, 3,2]]
+    neuralnet = [[4, 3, 4], [4, 3, 4], [4, 3, 4], [12, 4, 3, 2]]
     #neuralnet = [[4, 3, 4], [4, 3, 4], [4, 3, 4], [12,4, 2]]
     neuralneta = []
     botsize = 30
@@ -41,8 +38,8 @@ if __name__ == '__main__':
     #    print(i.getencoded())
     # t = neuralneta[0].createoppositeindividual(1,-1)
     # print(len(t.getencoded()))
-    cendobl = NeuralNetwork.CENDEDOBL(neuralneta, 0.3, 30, neuralnet, port, 1,
-                                      save="./data")
+    cendobl = NeuralNetwork.CENDEDOBL(populationsize=neuralneta, jumpingrate=0.3, runtime=30, layer=neuralnet,
+                                      startport=port, chunksize=1, save="./data")
     cendobl.starmanger()
     #cendobl.readindata("./data/30_104.json")
     # res = cendobl.benchmark(3)
