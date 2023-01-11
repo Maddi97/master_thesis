@@ -1,13 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using System;
-using UnityEngine;
-using System.Threading;
+using System.Collections.Generic;
 using System.Net;
-using System.IO;
 using System.Net.Sockets;
 using System.Text;
-using Json.Net;
+using System.Threading;
+using UnityEngine;
 
 public class Manager : MonoBehaviour
 {
@@ -40,10 +37,10 @@ public class Manager : MonoBehaviour
 	public string adress;
 
 	private int startport;
-	public float maxx;
-	public float minx;
-	public float maxy;
-	public float miny;
+
+	//spawn position
+	public Vector3 managerPosition;
+
 	private List<Bot> bot;
 	private string result;
 
@@ -61,14 +58,18 @@ public class Manager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+
+		// init manager position
+		this.managerPosition = this.gameObject.transform.position;
+
 		if (humanpilot){
-			initblock();
-			initbot();
+			InitializeMapWithObstacles();
+			InitializeBots();
 
 			
 		}else{
 			Application.targetFrameRate = 5;
-			initblock();
+			InitializeMapWithObstacles();
 			InitUDP();
 		}
 
@@ -91,14 +92,14 @@ public class Manager : MonoBehaviour
 			}*/
 			this.start = false;
 
-			initbot();
+			InitializeBots();
 			ENDOFGAME = false;
 		}
 		if (shuffle){
 			if (obstacleMap.obstacles.Count >0 ){
 				obstacleMap.DestroyObstacles();
 			}
-			initblock();
+			InitializeMapWithObstacles();
 			shuffle = false;
 		}
 		if (ENDOFGAME){
@@ -109,42 +110,9 @@ public class Manager : MonoBehaviour
 			ENDOFGAME = false;
 		}
     }
+      
     
-    float[] createxy(){
-		float[] k = {UnityEngine.Random.Range(minx, maxx),UnityEngine.Random.Range(miny, maxy)};
-		Debug.Log("x:"+k[0].ToString()+ " y:"+ k[1].ToString());
-		return k;
-	}
-    
-    bool testxy(float[] temp, float[] check, int counter){
-		for (int i = 0; i< counter; i=i+2){
-			double d = System.Math.Sqrt(System.Math.Pow(temp[0]-check[i],2)+System.Math.Pow(temp[1]-check[i+1],2));
-			//Debug.Log("Distance"+ d.ToString());
-			if (d<3){
-				return false;
-			}
-		}
-		return true;
-	}
-    
-    float[] getrandom(int count){
-		float[] random = new float[count*2];
-		float[] temp = new float[2];
-		for (int i = 0; i < count*2; i=i+2){
-			temp = createxy();
-			while(!testxy(temp,random, i)){
-				
-				temp = createxy();
-			}
-			random[i]= temp[0];
-			random[i+1] = temp[1];
-				
-		} 
-		return random;
-		
-	}
-    
-    void initblock(){
+    void InitializeMapWithObstacles(){
 		ObstacleList obstacleList;
 
 		// load a already generated map
@@ -198,11 +166,11 @@ public class Manager : MonoBehaviour
 	}
     
     
-    void initbot()
+    void InitializeBots()
     {
 		bot = new List<Bot>();
 		for (int i = 0; i < this.numberOfBots; i++){
-			Bot b  = Instantiate(this.vehicle, new Vector3(19,0,5), Quaternion.Euler(0f, -90f, 0f)).GetComponent(typeof(Bot)) as Bot;
+			Bot b  = Instantiate(this.vehicle, this.managerPosition, Quaternion.Euler(0f, -90f, 0f)).GetComponent(typeof(Bot)) as Bot;
 			if (humanpilot){
 				b.sethumandriver(true);
 			}
@@ -284,9 +252,8 @@ public class Manager : MonoBehaviour
 					break;
 				}
 				if (dataready){
-					print(result);
-					
-					byte[] resultbyte = System.Text.Encoding.UTF8.GetBytes(result);
+					print("Result: " + this.result.ToString());
+					byte[] resultbyte = System.Text.Encoding.UTF8.GetBytes(this.result);
 					client.Send(resultbyte,resultbyte.Length, anyIP);
 					dataready = false;
 					/*while (true){

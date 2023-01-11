@@ -36,6 +36,8 @@ public class ObstacleList
 public class ObstacleMap : MonoBehaviour
 {
     public List<UnityEngine.Object> obstacles = new List<UnityEngine.Object>();
+    public int obstacleCount = 11;
+
     public GameObject obstacleblue;
     public GameObject obstaclered;
 
@@ -118,13 +120,35 @@ public class ObstacleMap : MonoBehaviour
 
     private Obstacle[] GenerateEasyGoalLaneMiddleMap()
     {
-        Obstacle[] obstacles = new Obstacle[0];
-        return obstacles;
+        List<Obstacle> obstacles = new List<Obstacle>();
+
+        for (int i = 1; i < obstacleCount - 1; i++)
+        {
+            Obstacle blueObstacle;
+            Obstacle redObstacle;
+            // vector bounds: (0, 15 , 0 ,  10 - 0)
+
+            // left row
+            // red
+            redObstacle = new Obstacle(this.obstaclered, new Vector3(i * 2, (float)1.2, 1));
+
+            //lerigtft row
+            //blue
+            blueObstacle = new Obstacle(this.obstacleblue, new Vector3(i * 2, (float)1.2, 10));
+
+
+            obstacles.Add(blueObstacle);
+            obstacles.Add(redObstacle);
+
+        }
+
+        return obstacles.ToArray();
+
+
     }
 
     private Obstacle[] GenerateTwoGoalLanesMap()
     {
-        int obstacleCount = 10;
 
         List<Obstacle> obstacles = new List<Obstacle>();
 

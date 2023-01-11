@@ -1,4 +1,17 @@
-# BachelorNN
-This repo houses the code for the neural network that can drive a self-driving vehicle in a simulator (Unity).
- 
-Parent repo for the Unity stuff: https://github.com/jonaskonig/carsim
+# Notes
+
+Bot ports:
+
+In unity
+
+bot: this.port:
+
+- 9657
+- 9661
+- 9665
+
+bot ports start in python:
+
+- 9557
+- 9661
+- 9665

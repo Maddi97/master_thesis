@@ -185,8 +185,8 @@ class NeuralNet:
 
 
 class CENDEDOBL:
-    def __init__(self, populationsize: List[NeuralNet], jumpingrate, runtime, layer, startport, chunksize,
-                 save: str = "./",
+    def __init__(self, populationsize: List[NeuralNet], jumpingrate, runtime, layer, startport, numberOfBots,
+                 filePathNeuralNet: str = "./",
                  address="127.0.0.1"):
         self.manager = None
         self.populationsize = populationsize
@@ -196,13 +196,13 @@ class CENDEDOBL:
         self.upperbound = -1
         self.startport = startport
         self.layer = layer
-        self.save = save
-        self.chunksize = chunksize
+        self.save = filePathNeuralNet
+        self.numberOfBots = numberOfBots
         self.iteration = 0
         self.address = address
 
     def starmanger(self):
-        self.manager = Manager.CommunicationManager(self.startport, self.address, self.chunksize)
+        self.manager = Manager.CommunicationManager(self.startport, self.address, self.numberOfBots)
         #self.manager.setshuffle()
         self.startport += 4
 
@@ -292,31 +292,37 @@ class CENDEDOBL:
     def benchmark(self, rounds: int):
 
         finresult = []
-        for kk in range(rounds):
+        for round in range(rounds):
             counter = 0
-            print(len(self.populationsize))
+            print(f"Population size: {len(self.populationsize)} in round: {round}")
             roundresult = []
             while counter < len(self.populationsize):
                 startport = self.startport
                 currentactiveingame = []
-                if len(self.populationsize) - counter > self.chunksize:
-                    self.manager.setbotcount(self.chunksize)
+
+                if len(self.populationsize) - counter > self.numberOfBots:
+                    self.manager.setNumberOfBots(self.numberOfBots)
                     self.manager.setstart()
-                    for x in range(self.chunksize):
+                    for x in range(self.numberOfBots):
                         currentactiveingame.append(
                             Communicator.Communicator(startport, self.address, self.populationsize[counter]))
                         counter += 1
                         startport += 4
                 else:
-                    self.manager.setbotcount(len(self.populationsize) - counter)
+                    self.manager.setNumberOfBots(len(self.populationsize) - counter)
                     self.manager.setstart()
                     for x in range(len(self.populationsize) - counter):
                         currentactiveingame.append(
                             Communicator.Communicator(startport, self.address, self.populationsize[counter]))
                         counter += 1
                         startport += 4
+
+                # until here started Bots to drive and then waits runtime
                 time.sleep(self.runtime)
+
+                # send stop and trigger getscore on unity side
                 self.manager.setstop()
+
                 print("setstop")
                 for active in currentactiveingame:
                     active.setstoprunning()
@@ -334,24 +340,37 @@ class CENDEDOBL:
         return finresult
 
     def findbestindividuals(self, coparer: List[NeuralNet], onebyone=False, testself=False):
+        """
+
+        :param coparer: list len population size of neural networks
+        :param onebyone:
+        :param testself:
+        :return:
+        """
         counter = 0
+        # für jedes indivifdum wird ein training ausgeführt
+        # einmal length runtime fahren
         while counter < len(coparer):
             startport = self.startport
             currentactiveingame = []
-            if len(coparer) - counter > self.chunksize:
-                self.manager.setbotcount(self.chunksize)
+            if len(coparer) - counter > self.numberOfBots:
+                self.manager.setNumberOfBots(self.numberOfBots)
                 self.manager.setstart()
-                for x in range(self.chunksize):
+
+                # für jeden bot active game
+                for x in range(self.numberOfBots):
                     currentactiveingame.append(Communicator.Communicator(startport, self.address, coparer[counter]))
                     counter += 1
                     startport += 4
             else:
-                self.manager.setbotcount(len(coparer) - counter)
+                self.manager.setNumberOfBots(len(coparer) - counter)
                 self.manager.setstart()
                 for x in range(len(coparer) - counter):
                     currentactiveingame.append(Communicator.Communicator(startport, self.address, coparer[counter]))
                     counter += 1
                     startport += 4
+
+            #after runtime stop game
             time.sleep(self.runtime)
             self.manager.setstop()
             print("setstop")
@@ -385,7 +404,7 @@ class CENDEDOBL:
         time.sleep(1)
 
     def evaluateindividum(self, individum: NeuralNet):
-        self.manager.setbotcount(1)
+        self.manager.setNumberOfBots(1)
         self.manager.setstart()
         t = Communicator.Communicator(self.startport, self.address, individum)
         time.sleep(self.runtime)
@@ -462,6 +481,8 @@ class CENDEDOBL:
                 self.manager.setshuffle()
                 self.findbestindividuals(self.populationsize, testself=True)
             first = False
+
+            # guess select 2 different individuums
             x1 = random.randint(0, len(self.populationsize) - 1)
             x2 = random.randint(0, len(self.populationsize) - 1)
             while x1 == x2:

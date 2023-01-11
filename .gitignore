@@ -42,6 +42,7 @@ ExportedObj/
 *.mdb
 *.opendb
 *.VC.db
+*.pyc
 
 # Unity3D generated meta files
 *.pidb.meta
@@ -65,3 +66,7 @@ crashlytics-build.properties
 .idea/**
 
 .DS_STORE
+__pycache__
+**/__pycache__
+__pycache__/**
+

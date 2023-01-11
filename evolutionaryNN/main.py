@@ -20,14 +20,15 @@ if __name__ == '__main__':
     neuralnet = [[4, 3, 4], [4, 3, 4], [4, 3, 4], [12, 4, 3,2]]
     #neuralnet = [[4, 3, 4], [4, 3, 4], [4, 3, 4], [12,4, 2]]
     neuralneta = []
-    botsize = 30
+    populationSize = 2
+    numberOfBots = 1
     port = 9653
     # mana = Manager.CommunicationManager(port, "127.0.0.1", botsize)
     # port += 4
     # time.sleep(0.5)
     # mana.setshuffle()
     # mana.setstart()
-    for x in range(botsize):
+    for x in range(populationSize):
         neuro = NeuralNetwork.NeuralNet(neuralnet, upperbound=1, lowerbound=-1)
         neuro.initvalues()
         # print(neuro.getencoded())
@@ -41,16 +42,30 @@ if __name__ == '__main__':
     #    print(i.getencoded())
     # t = neuralneta[0].createoppositeindividual(1,-1)
     # print(len(t.getencoded()))
-    cendobl = NeuralNetwork.CENDEDOBL(neuralneta, 0.3, 30, neuralnet, port, 1,
-                                      save="./data")
+
+    # cendobl = NeuralNetwork.CENDEDOBL(populationsize=neuralneta, jumpingrate=0.3, runtime=30, neuralnet, port, 1,
+    #                                   save="./data")
+
+    cendobl = NeuralNetwork.CENDEDOBL(populationsize=neuralneta, jumpingrate=0.3, runtime=20, layer=neuralnet,
+                                      startport=port, numberOfBots=numberOfBots, filePathNeuralNet="data/testNeuralNet")
+
+    #set up communication and pre-train variables
     cendobl.starmanger()
     #cendobl.readindata("./data/30_104.json")
-    # res = cendobl.benchmark(3)
+    #cendobl.CenDEDOL(0.9, 0.5, 3)
+    cendobl.CenDEDOL(0.9, 0.5, 2)
+    # seems to start training/ inference
+    #res = cendobl.benchmark(rounds=10)
+
+
     # with open('sample30.csv', 'w') as f:
     #     mywriter = csv.writer(f, delimiter=',')
     #     mywriter.writerows(res)
+
+
+
     #cendobl.CenDEDOL(0.9, 0.5, 3)
-    cendobl.DE(0.9, 0.5, newrun=True)
+    #cendobl.DE(0.9, 0.5, newrun=True)
     #cendobl.readindata("./30popsize/57.json")
     #t = cendobl.getpop()
     #mana = Manager.CommunicationManager(port, "127.0.0.1", 1)

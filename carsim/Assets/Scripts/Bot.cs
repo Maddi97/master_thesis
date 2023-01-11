@@ -17,6 +17,9 @@ public class Bot : MonoBehaviour
 	public int resHeight;
 	private const string HORIZONTAL = "Horizontal";
     private const string VERTICAL = "Vertical";
+
+	//spawn position == manager position
+	public Vector3 spawnPosition = new Vector3(19, 0, 5);
 	
     [SerializeField] private float motorForce;
     [SerializeField] private float maxSteerAngle;
@@ -52,18 +55,26 @@ public class Bot : MonoBehaviour
 	private bool recvstop = true;
 	private bool sendstop = true;
 	public Camera camera;
-    void FixedUpdate()//FixedUpdate is called at a constant interval
+
+	void FixedUpdate()//FixedUpdate is called at a constant interval
     {
-		if (!humanstart){
-			if(Input.GetKey(KeyCode.Space)){
+		if (!humanstart)
+		{
+			if(Input.GetKey(KeyCode.Space))
+			{
 				humanstart = true;
 				starttime = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeMilliseconds();
 				print("start");
 			}
-		}else{
-			if(new DateTimeOffset(DateTime.UtcNow).ToUnixTimeMilliseconds()-starttime>= 40000){
-				dist = 72.8f-(-26)-(72.8f-transform.position.z);
-	//			print(dist);
+		}
+		else
+		{
+			if(new DateTimeOffset(DateTime.UtcNow).ToUnixTimeMilliseconds()-starttime>= 40000)
+			{
+				//dist = 72.8f-(-26)-(72.8f-transform.position.z);
+				//			print(dist);
+				dist = this.spawnPosition.x - transform.position.z;
+
 				long time = (new DateTimeOffset(DateTime.UtcNow).ToUnixTimeMilliseconds()+(count*millipusish))-starttime;
 				score = dist/(time);
 //				print(score);
@@ -74,7 +85,7 @@ public class Bot : MonoBehaviour
 		if (humanpilot){
 			GetInput();
 		}
-		
+
 		HandleMotor();
         HandleSteering();
         UpdateWheels();
@@ -131,7 +142,12 @@ public class Bot : MonoBehaviour
 	}
 	private void HandleMotor()
     {
-        frontLeftWheelCollider.motorTorque = acc * motorForce;
+		if (acc > 0)
+        {
+			Debug.Log("Update Motor: " + acc.ToString() + " & " + motorForce.ToString());
+
+		}
+		frontLeftWheelCollider.motorTorque = acc * motorForce;
         frontRightWheelCollider.motorTorque = acc * motorForce;    
     }
 	
@@ -153,8 +169,8 @@ public class Bot : MonoBehaviour
     private void UpdateSingleWheel(WheelCollider wheelCollider, Transform wheelTransform)
     {
         Vector3 pos;
-        Quaternion rot
-;       wheelCollider.GetWorldPose(out pos, out rot);
+        Quaternion rot;
+		wheelCollider.GetWorldPose(out pos, out rot);
         wheelTransform.rotation = rot;
         wheelTransform.position = pos;
     }
@@ -175,12 +191,19 @@ public class Bot : MonoBehaviour
 		this.recvstop = false;
 		this.sendstop = false;
 		if (score == 0){
-			print("calcu");
-			dist = 72.8f-(-26)-(72.8f-transform.position.z);
+			print("Calculation");
+			// old: dist = 72.8f-(-26)-(72.8f-transform.position.z);
+
+			// only x direction is progress
+			// from -19 to 0 hardcoded -> when not driving 0 distance its 19-19 and in finisch its 19-0=19
+			dist = this.spawnPosition.x - transform.position.x;
 			print(dist);
 			long time = (new DateTimeOffset(DateTime.UtcNow).ToUnixTimeMilliseconds()+(count*millipusish))-starttime;
 			//print(time);
-			score = dist/(time);
+			//score = dist/(time);
+
+			score = dist + this.count;
+			print("Score: " + score.ToString());
 			//print(score);
 		}
 		try{
@@ -201,17 +224,22 @@ public class Bot : MonoBehaviour
 		return duration;
 	}
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter(Collider actualPassedObstacle)
     {
-	    if (other.tag == "red" && !(isleft(other.transform.position))){
-			Debug.Log("red");
+		// if color is red & you drive by on the right side (not left)
+	    if (actualPassedObstacle.tag == "red" && !(isleft(actualPassedObstacle.transform.position))){
+			Debug.Log("Passed red obstacle on the ride side");
 		   count++;
-		}else if(other.tag == "blue" && isleft(other.transform.position)){
-			Debug.Log("blue");
+
+		//if color of obstacle is blue and yo pass it left
+		}else if(actualPassedObstacle.tag == "blue" && isleft(actualPassedObstacle.transform.position)){
+			Debug.Log("Passed blue obstacle on the left side");
 			count++;
-		}else if (other.tag == "finish"){
+
+			//if you read finish line
+		}else if (actualPassedObstacle.tag == "finish"){
 			duration =  (new DateTimeOffset(DateTime.UtcNow).ToUnixTimeMilliseconds()+count*millipusish)-starttime;
-			dist = 72.8f-(-26)-(72.8f-transform.position.z);// Vector3.Distance(new Vector3(0,-1.7f,-26), );
+			dist = this.spawnPosition.x - transform.position.z;
 			score = dist/duration;
 			print(score);
 			gamegoson = false;
@@ -276,9 +304,15 @@ public class Bot : MonoBehaviour
 					recvstop = false;
 					break;
 				}
+
+	
 				string[] texts = text.Split(";");
-				acc = float.Parse(texts[0]);
-				steer = float.Parse(texts[1]);
+				//print("Port:" + port.ToString());
+				
+				this.acc = float.Parse(texts[0]);
+				this.steer = float.Parse(texts[1]);
+
+				print("Port: " + port.ToString() + " acc: " + this.acc);
 			} 
 			catch(Exception e){
 				print (e.ToString());
