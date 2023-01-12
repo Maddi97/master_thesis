@@ -10,8 +10,13 @@ public class Manager : MonoBehaviour
 {
 	// arena coordinates: (0, 0) (0, 10) (20,10) (20, 0)
 
+
+	//
+	public int idOfCurrentRun;
+
 	// Game objects
-	public GameObject vehicle;//holds bot vehicle			
+	public GameObject vehicleAI;//holds bot vehicle
+	public GameObject vehicleControlled;
 
 	// initialize obstacle Map
 	public ObstacleMap obstacleMap = new();
@@ -29,86 +34,46 @@ public class Manager : MonoBehaviour
 	private bool saveObstacles = false;
 	public string saveObstacleMapFilePath = ".";
 
+	private SpawnManager spawnManager;
 
+	//to store result
+	private int result;
 
-	public bool humanpilot = false;
-	public int port;
-	public int idOfCurrentRun;
-	public string adress;
+	// 
+	public bool humanPilot = true;
 
-	private int startport;
+	
+	private List<Bot> botList;
 
-	//spawn position
-	public Vector3 managerPosition;
-
-	private List<Bot> bot;
-	private string result;
-
-	private int numberOfBots = 10;
-	private bool ENDOFGAME = false;
-	private bool dataready = false;
-	private bool closeconnect = false;
-	private bool shuffle = false;
-	private bool start = false;
-	private Thread receiveThread; //1
-	private Thread sendThread; //1
-	private UdpClient client;
-	private UdpClient server;
-	private int botport;
     // Start is called before the first frame update
     void Start()
     {
+		// load obstacles
+		InitializeMapWithObstacles();
 
-		// init manager position
-		this.managerPosition = this.gameObject.transform.position;
+		//get Spawn Manager
+		this.spawnManager = FindObjectOfType<SpawnManager>();
 
-		if (humanpilot){
-			InitializeMapWithObstacles();
-			InitializeBots();
-
-			
-		}else{
-			Application.targetFrameRate = 5;
-			InitializeMapWithObstacles();
-			InitUDP();
+		if (this.humanPilot)
+		{
+			SpawnControlledCar();
 		}
 
+		else
+		{
+			print("TODO Bot");
+		}
     }
 
 	void FixedUpdate()//FixedUpdate is called at a constant interval
     {
 		
 	}
+
     // Update is called once per frame
     void Update()
     {
-        if (this.start){
-			botport = port+4;
 
-			/*try{
-			   destroybots();
-			}catch(Exception e){
-				print (e.ToString()); 
-			}*/
-			this.start = false;
-
-			InitializeBots();
-			ENDOFGAME = false;
-		}
-		if (shuffle){
-			if (obstacleMap.obstacles.Count >0 ){
-				obstacleMap.DestroyObstacles();
-			}
-			InitializeMapWithObstacles();
-			shuffle = false;
-		}
-		if (ENDOFGAME){
-			print("ENDOFGAME");
-			getresults();
-			dataready = true;
-			destroybots();
-			ENDOFGAME = false;
-		}
     }
       
     
@@ -141,144 +106,24 @@ public class Manager : MonoBehaviour
 
 	}
     
-    void getresults(){
-		result = "";
-		for (int i = 0; i < bot.Count; i++){
-			print(i);
-			if (i == 0){
-				result += bot[i].getscore().ToString("0.#######");
-			}else{
-				result += (";"+bot[i].getscore().ToString("0.#######"));
-				
-			}
-		}
+    void getResult(){
+		
 	}
     
     void destroybots(){
-		for (int i = 0; i < bot.Count; i++){
-			bool temp  = bot[i].getnothread();
-			while (!temp){
-				
-				temp  = bot[i].getnothread();
-			}
-			GameObject.Destroy(bot[i].gameObject);
-		}
+		
 	}
     
-    
-    void InitializeBots()
+    void SpawnControlledCar()
     {
-		bot = new List<Bot>();
-		for (int i = 0; i < this.numberOfBots; i++){
-			Bot b  = Instantiate(this.vehicle, this.managerPosition, Quaternion.Euler(0f, -90f, 0f)).GetComponent(typeof(Bot)) as Bot;
-			if (humanpilot){
-				b.sethumandriver(true);
-			}
-			b.setportandaddress(botport,"127.0.0.1");
-			botport += 4;
-			bot.Add(b);
-		}
+		Vector3 spawnPosition = spawnManager.SelectRandomSpawnpoint();
+		GameObject controlledCar = Instantiate(vehicleControlled, spawnPosition, new Quaternion(0, 1, 0, 0));
+
+	}
+
+	void InitializeBots()
+    {
 		
-	}
-	
-	private void InitUDP(){
-		print ("UDP Initialized");
-		this.receiveThread = new Thread (new ThreadStart(UDPstuff));
-		this.sendThread = new Thread (new ThreadStart(UDPrecv));
-		this.sendThread.IsBackground = true;
-		this.receiveThread.IsBackground = true;
-		this.receiveThread.Start();
-		this.sendThread.Start();
-	}
-    
-    
-    private void UDPrecv(){
-		server = new UdpClient(port+2);
-		IPEndPoint localEp = new IPEndPoint(IPAddress.Parse(adress), 0);
-		//server.Client.Bind(localEp);
-		byte[] data;
-		while (true){
-			try{
-				data = server.Receive(ref localEp); 
-				string text = Encoding.UTF8.GetString(data); 
-				print(text);
-				if (text == "CLOSECONNECT"){
-					closeconnect = true;
-					break;
-				}
-				if (text == "SHUFFLE"){
-					shuffle = true;
-					ENDOFGAME = true;
-					continue;
-					
-				}
-				if (text == "START"){
-					start = true;
-					continue;
-				}
-				if (text == "GETRESULT"){
-					print("sendingagain");
-					dataready = true;
-					continue;
-				}
-				string[] texts = text.Split(";");
-				if (texts[0]=="BOTCOUNT"){
-					this.numberOfBots = int.Parse(texts[1]);
-					continue;
-				}
-				if (texts[0] == "EOG"){
-					ENDOFGAME = true;
-					continue;
-					
-				}
-				
-			
-			} 
-			catch(Exception e){
-				print (e.ToString());
-			}
-		}
-		
-	}
-	
-	private void UDPstuff(){
-		client = new UdpClient(port);
-		IPEndPoint anyIP = new IPEndPoint(IPAddress.Parse(adress),port+3);
-		byte[] startresult = System.Text.Encoding.UTF8.GetBytes("RESULTSTART");
-		byte[] endresult = System.Text.Encoding.UTF8.GetBytes("RESULTEND");
-		while (true){
-			try{
-				if (closeconnect){
-					break;
-				}
-				if (dataready){
-					print("Result: " + this.result.ToString());
-					byte[] resultbyte = System.Text.Encoding.UTF8.GetBytes(this.result);
-					client.Send(resultbyte,resultbyte.Length, anyIP);
-					dataready = false;
-					/*while (true){
-						if (resultbyte.Length < 8654){
-							client.Send(resultbyte,resultbyte.Length, anyIP);
-							print("sending the rest!");
-							dataready = false;
-							break;
-						}
-						byte[] first = new byte[8654];
-						Buffer.BlockCopy(resultbyte, 0, first, 0, first.Length);
-						byte[] second = new byte[resultbyte.Length - first.Length];
-						Buffer.BlockCopy(resultbyte, first.Length, second, 0, second.Length);
-						client.Send(first,first.Length,anyIP);
-						resultbyte = second;
-					}
-					client.Send(endresult,endresult.Length, anyIP);*/
-				}
-				
-				
-			}			
-			catch(Exception e){
-				print (e.ToString()); 
-			}
-		}
 	}
 	
 }
