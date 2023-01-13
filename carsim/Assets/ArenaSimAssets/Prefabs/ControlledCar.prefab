@@ -97,10 +97,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e39a13b12af486f4eab94bd9b169dd54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  offset: {x: 0, y: 1, z: 0}
-  target: {fileID: 2879654619789689899}
-  translateSpeed: 0
-  rotationSpeed: 0
 --- !u!1 &495316119933957924
 GameObject:
   m_ObjectHideFlags: 0

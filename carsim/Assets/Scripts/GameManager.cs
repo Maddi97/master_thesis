@@ -26,6 +26,9 @@ public class GameManager : MonoBehaviour
 	// need to load the prefabs of the obstacles in unity here
 	public GameObject obstacleBlue;
 	public GameObject obstacleRed;
+	public GameObject goalPassedWallCheckpoint;
+	public GameObject goalMissedWallCheckpoint;
+
 
 	// initialize obstacle Map Generator
 	private ObstacleMapManager obstacleMapManager;
@@ -60,7 +63,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
 		// load obstacles
-		this.obstacleMapManager = new ObstacleMapManager(obstacleBlue, obstacleRed);
+		this.obstacleMapManager = new ObstacleMapManager(obstacleBlue, obstacleRed, goalPassedWallCheckpoint, goalMissedWallCheckpoint);
 		InitializeMapWithObstacles();
 
 		//get Spawn Manager

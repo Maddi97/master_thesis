@@ -4,10 +4,8 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - blue
-  - red
-  - start
-  - finish
+  - GoalPassed
+  - GoalMissed
   layers:
   - Default
   - TransparentFX
