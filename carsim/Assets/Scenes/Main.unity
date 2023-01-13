@@ -1306,56 +1306,6 @@ Transform:
   m_Father: {fileID: 685248604}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &84630723
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 84630725}
-  - component: {fileID: 84630724}
-  m_Layer: 0
-  m_Name: ObstacleMapManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &84630724
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 84630723}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0794c99f039f4b0cb4e6b904c4f990e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  obstacles: []
-  obstacleCount: 11
-  obstacleblue: {fileID: 2786694837747256956, guid: 681200f7d15524e8589d7a28c0376f42,
-    type: 3}
-  obstaclered: {fileID: 4860177610794674011, guid: 3e11cd3ae44c8436d85c818e43d4b542,
-    type: 3}
---- !u!4 &84630725
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 84630723}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 19.21, y: 0, z: 4.52}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 4
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &84786302
 GameObject:
   m_ObjectHideFlags: 0
@@ -28689,13 +28639,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1496588404}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 12.567593, y: 3.6629748, z: 4.631574}
+  m_LocalPosition: {x: 1, y: 0, z: 5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2062224866}
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1498341419
 GameObject:
@@ -33477,36 +33427,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1776526685}
-  - component: {fileID: 1776526684}
+  - component: {fileID: 1776526686}
   m_Layer: 0
-  m_Name: Manager
+  m_Name: GameManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1776526684
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1776526683}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 99c683982cad04b179d07cdc338d8963, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  idOfCurrentRun: 0
-  vehicleAI: {fileID: 6793220110095211619, guid: f606a5942af95440fb4b3082a4f4c9f6,
-    type: 3}
-  vehicleControlled: {fileID: 1360888143983817536, guid: f67335012281b4c5aa825494555d4214,
-    type: 3}
-  obstacleMap: {fileID: 84630724}
-  mapTypeGenerateMap: 1
-  loadObstacleMapFilePath: .
-  saveObstacleMapFilePath: .
-  humanPilot: 1
 --- !u!4 &1776526685
 Transform:
   m_ObjectHideFlags: 0
@@ -33522,6 +33450,32 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1776526686
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1776526683}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f8798f8da543e4c3f8e262b5daab4dc2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  idOfCurrentRun: 0
+  vehicleAI: {fileID: 0}
+  vehicleControlled: {fileID: 1360888143983817536, guid: f67335012281b4c5aa825494555d4214,
+    type: 3}
+  obstacleBlue: {fileID: 2786694837747256956, guid: 681200f7d15524e8589d7a28c0376f42,
+    type: 3}
+  obstacleRed: {fileID: 2786694837747256956, guid: bb1e06762c3f749b2869d0767ccf3249,
+    type: 3}
+  mapTypeGeneratedMap: 1
+  loadObstacles: 0
+  loadObstacleMapFilePath: .
+  saveObstacles: 0
+  saveObstacleMapFilePath: .
+  humanPilot: 1
 --- !u!1 &1776717038
 GameObject:
   m_ObjectHideFlags: 0
@@ -41558,22 +41512,22 @@ PrefabInstance:
     - target: {fileID: 905371549514196424, guid: 8d572790149fb4fe59e9d3671021fba5,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 6.34
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 905371549514196424, guid: 8d572790149fb4fe59e9d3671021fba5,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -3.6629748
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 905371549514196424, guid: 8d572790149fb4fe59e9d3671021fba5,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.36842585
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 905371549514196424, guid: 8d572790149fb4fe59e9d3671021fba5,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.7071068
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 905371549514196424, guid: 8d572790149fb4fe59e9d3671021fba5,
         type: 3}
@@ -41583,7 +41537,7 @@ PrefabInstance:
     - target: {fileID: 905371549514196424, guid: 8d572790149fb4fe59e9d3671021fba5,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.7071068
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 905371549514196424, guid: 8d572790149fb4fe59e9d3671021fba5,
         type: 3}
@@ -41598,7 +41552,7 @@ PrefabInstance:
     - target: {fileID: 905371549514196424, guid: 8d572790149fb4fe59e9d3671021fba5,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: -90
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 905371549514196424, guid: 8d572790149fb4fe59e9d3671021fba5,
         type: 3}
@@ -41609,6 +41563,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: SpawnPoint
+      objectReference: {fileID: 0}
+    - target: {fileID: 1349819648335590546, guid: 8d572790149fb4fe59e9d3671021fba5,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 6247836348011751935, guid: 8d572790149fb4fe59e9d3671021fba5, type: 3}

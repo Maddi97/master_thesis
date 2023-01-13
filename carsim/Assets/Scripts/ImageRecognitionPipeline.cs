@@ -1,10 +1,7 @@
 ﻿using System;
 using Emgu.CV;
 using Emgu.CV.Structure;
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using Emgu.CV.Util;
 using System.Drawing;
 

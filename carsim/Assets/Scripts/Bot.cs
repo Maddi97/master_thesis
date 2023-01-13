@@ -86,6 +86,7 @@ public class Bot : MonoBehaviour
 			GetInput();
 		}
 
+		Thread.Sleep(1000);
 		HandleMotor();
         HandleSteering();
         UpdateWheels();
@@ -137,7 +138,7 @@ public class Bot : MonoBehaviour
 	private void setupcam(){
 		GameObject temp  = Instantiate(prefab,transform.position+ new Vector3(0,5,0),new Quaternion(0, 0, 0, 0));
 		CameraFollow script = temp.GetComponent<CameraFollow>();
-		script.settransform(transform);
+		//script.settransform(transform);
 		camera = temp.GetComponent<Camera>();
 	}
 	private void HandleMotor()

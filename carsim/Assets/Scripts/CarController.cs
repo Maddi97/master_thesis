@@ -47,8 +47,10 @@ public class CarController : MonoBehaviour
 
     private void HandleMotor()
     {
-        //resistance velocity depanend + (or if backwards -) konstant to break when not accelerating
-        float resistance = this.getCarVelocity() * 10f + Math.Sign(this.getCarVelocity()) * 15f;
+        //resistance slows down car when not accelarating
+        // grows with velocity + (signed in direction of vel) constant
+
+        float resistance = (this.getCarVelocity() * 10f) + Math.Sign(this.getCarVelocity()) * 15f;
         
 
         frontLeftWheelCollider.motorTorque = (verticalInput * motorForce) - resistance;
