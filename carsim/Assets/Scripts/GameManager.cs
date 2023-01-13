@@ -71,13 +71,14 @@ public class GameManager : MonoBehaviour
 
 		if (this.humanPilot)
 		{
-			print("Spawn Cars");
+			print("Spawn Controlled Car");
 			SpawnControlledCar();
 		}
 
 		else
 		{
-			print("TODO Bot");
+			print("Spawn AI car");
+			SpawnAICar();
 		}
     }
 
@@ -138,9 +139,11 @@ public class GameManager : MonoBehaviour
 
 	}
 
-	void InitializeBots()
+	void SpawnAICar()
     {
-		
+		Vector3 spawnPosition = spawnManager.SelectRandomSpawnpoint();
+		GameObject aiCar = Instantiate(vehicleAI, spawnPosition, new Quaternion(0, 1, 0, 1));
 	}
+
 	
 }
