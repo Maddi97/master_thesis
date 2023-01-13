@@ -253,6 +253,9 @@ GameObject:
   - component: {fileID: 1849018064595741178}
   - component: {fileID: 6274593966186973266}
   - component: {fileID: 6274593966186973267}
+  - component: {fileID: 1983022603607916040}
+  - component: {fileID: 7849279582921989551}
+  - component: {fileID: 2134114297457567584}
   m_Layer: 0
   m_Name: ControlledCar
   m_TagString: Untagged
@@ -302,7 +305,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1360888143983817536}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 45a1d5f246db83d4e9db796e9e19282e, type: 3}
   m_Name: 
@@ -319,6 +322,78 @@ MonoBehaviour:
   rearRightWheelTransform: {fileID: 4572069554671827839}
   carBody: {fileID: 2879654619789689899}
   count: 0
+--- !u!114 &1983022603607916040
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1360888143983817536}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d1c4e0b1822b495aa52bc52839ecb30, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_BrainParameters:
+    VectorObservationSize: 1
+    NumStackedVectorObservations: 1
+    m_ActionSpec:
+      m_NumContinuousActions: 2
+      BranchSizes: 01000000
+    VectorActionSize: 
+    VectorActionDescriptions: []
+    VectorActionSpaceType: 0
+    hasUpgradedBrainParametersWithActionSpec: 1
+  m_Model: {fileID: 0}
+  m_InferenceDevice: 0
+  m_BehaviorType: 0
+  m_BehaviorName: My Behavior
+  TeamId: 0
+  m_UseChildSensors: 1
+  m_UseChildActuators: 1
+  m_ObservableAttributeHandling: 0
+--- !u!114 &7849279582921989551
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1360888143983817536}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 789ee1ea3d18947d88a541451cdc2f33, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  agentParameters:
+    maxStep: 0
+  hasUpgradedFromAgentParameters: 1
+  MaxStep: 100
+  motorForce: 50
+  maxSteerAngle: 30
+  frontLeftWheelCollider: {fileID: 1919713468229280084}
+  frontRightWheelCollider: {fileID: 9050088764276208563}
+  rearLeftWheelCollider: {fileID: 1490915295485531174}
+  rearRightWheelCollider: {fileID: 3583183092813988609}
+  frontLeftWheelTransform: {fileID: 5917332818174460384}
+  frontRightWheeTransform: {fileID: 6152103735393066902}
+  rearLeftWheelTransform: {fileID: 5327351620171837208}
+  rearRightWheelTransform: {fileID: 7600409699930611992}
+  carBody: {fileID: 2879654619789689899}
+  count: 0
+--- !u!114 &2134114297457567584
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1360888143983817536}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a5c9d521e5ef4759a8246a07d52221e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DecisionPeriod: 5
+  TakeActionsBetweenDecisions: 0
 --- !u!1 &1415327222390731046
 GameObject:
   m_ObjectHideFlags: 0

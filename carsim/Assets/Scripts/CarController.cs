@@ -39,7 +39,6 @@ public class CarController : MonoBehaviour
     private void FixedUpdate()
     {
         this.drivingEngine.SetInput(this.GetInput());
-
         this.drivingEngine.HandleMotor();
         this.drivingEngine.HandleSteering();
         this.drivingEngine.UpdateWheels();
