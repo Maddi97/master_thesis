@@ -8,8 +8,7 @@ public class CarController : MonoBehaviour
     private const string HORIZONTAL = "Horizontal";
     private const string VERTICAL = "Vertical";
 
-    private float horizontalInput;
-    private float verticalInput;
+
     private float currentSteerAngle;
 
     [SerializeField] private float motorForce;
@@ -28,62 +27,33 @@ public class CarController : MonoBehaviour
 
 	[SerializeField] private Transform carBody;
 	[SerializeField] public int count;
+
+    private DrivingEngine drivingEngine;
     
+    private void Awake()
+    {
+        this.drivingEngine = new DrivingEngine( this.motorForce, this.maxSteerAngle, this.carBody, this.frontLeftWheelCollider, this.frontRightWheelCollider, this.rearLeftWheelCollider, this.rearRightWheelCollider,
+            this.frontLeftWheelTransform, this.frontRightWheeTransform, this.rearLeftWheelTransform, this.rearRightWheelTransform);
+    }
 
     private void FixedUpdate()
     {
-        GetInput();
-        HandleMotor();
-        HandleSteering();
-        UpdateWheels();
+        this.drivingEngine.SetInput(this.GetInput());
+
+        this.drivingEngine.HandleMotor();
+        this.drivingEngine.HandleSteering();
+        this.drivingEngine.UpdateWheels();
     }
 
 
-    private void GetInput()
+    private List<float> GetInput()
     {
-        horizontalInput = Input.GetAxis(HORIZONTAL);
-        verticalInput = Input.GetAxis(VERTICAL);
+        float accelerationInput = Input.GetAxis(HORIZONTAL);
+        float steerInput = Input.GetAxis(VERTICAL);
+        return new List<float>(){ accelerationInput, steerInput };
     }
 
-    private void HandleMotor()
-    {
-        //resistance slows down car when not accelarating
-        // grows with velocity + (signed in direction of vel) constant
-
-        float resistance = (this.getCarVelocity() * 10f) + Math.Sign(this.getCarVelocity()) * 15f;
-        
-
-        frontLeftWheelCollider.motorTorque = (verticalInput * motorForce) - resistance;
-        frontRightWheelCollider.motorTorque = (verticalInput * motorForce)- resistance;
-
-    }
-
-    private void HandleSteering()
-    {
-        currentSteerAngle = maxSteerAngle * horizontalInput;
-        frontLeftWheelCollider.steerAngle = currentSteerAngle;
-        frontRightWheelCollider.steerAngle = currentSteerAngle;
-    }
-
-    private void UpdateWheels()
-    {
-        UpdateSingleWheel(frontLeftWheelCollider, frontLeftWheelTransform);
-        UpdateSingleWheel(frontRightWheelCollider, frontRightWheeTransform);
-        UpdateSingleWheel(rearRightWheelCollider, rearRightWheelTransform);
-        UpdateSingleWheel(rearLeftWheelCollider, rearLeftWheelTransform);
-    }
-
-    private void UpdateSingleWheel(WheelCollider wheelCollider, Transform wheelTransform)
-    {
-        Vector3 pos;
-        Quaternion rot;
-        wheelCollider.GetWorldPose(out pos, out rot);
-        wheelTransform.rotation = rot;
-        wheelTransform.position = pos;
-        // Debug.Log(pos);
-        // (25, 87) , (-30, 90) (-30, (-25) , (24, -27)
-
-    }
+   
 
     private void OnTriggerEnter(Collider other)
     {

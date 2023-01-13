@@ -33470,6 +33470,10 @@ MonoBehaviour:
     type: 3}
   obstacleRed: {fileID: 2786694837747256956, guid: bb1e06762c3f749b2869d0767ccf3249,
     type: 3}
+  goalPassedWallCheckpoint: {fileID: 1821709658331299659, guid: 4ce475aa445dc47488e73e1e4f548ca1,
+    type: 3}
+  goalMissedWallCheckpoint: {fileID: 1821709658331299659, guid: 4b08f220d3a3c48f590fd8652ebf79e1,
+    type: 3}
   mapTypeGeneratedMap: 1
   loadObstacles: 0
   loadObstacleMapFilePath: .
