@@ -4,6 +4,7 @@ using UnityEngine;
 using Unity.MLAgents;
 using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Sensors;
+using System;
 
 public class CarAgent : Agent
 {
@@ -27,12 +28,11 @@ public class CarAgent : Agent
     [SerializeField] private Transform carBody;
     [SerializeField] public int count;
 
-    private DrivingEngine drivingEngine;
+    public AIEngine drivingEngine;
 
     public override void Initialize()
     {
-        this.drivingEngine = new DrivingEngine(this.motorForce, this.maxSteerAngle, this.carBody, this.frontLeftWheelCollider, this.frontRightWheelCollider, this.rearLeftWheelCollider, this.rearRightWheelCollider,
-           this.frontLeftWheelTransform, this.frontRightWheeTransform, this.rearLeftWheelTransform, this.rearRightWheelTransform);
+
     }
 
     public override void OnActionReceived(ActionBuffers actions)
@@ -45,32 +45,34 @@ public class CarAgent : Agent
         var actionInputFromNN = actions.ContinuousActions;
         List<float> input = new List<float>() { actionInputFromNN[0], actionInputFromNN[1] };
 
-
+        print("NN Input: [" + input[0] + ", " + input[1] + "]");
 
         this.drivingEngine.SetInput(input);
-        this.drivingEngine.HandleMotor();
-        this.drivingEngine.HandleSteering();
-        this.drivingEngine.UpdateWheels();
+
+        //this.drivingEngine.HandleMotor();
+        //this.drivingEngine.HandleSteering();
+        //this.drivingEngine.UpdateWheels();
     }
 
     public override void CollectObservations(VectorSensor sensor)
     {
 
         //TODO
-        sensor.AddObservation( 20f);
+        sensor.AddObservation( 0f);
 
 
     }
 
     //For manual testing with human input, the actionsOut defined here will be sent to OnActionRecieved
-    public override void Heuristic(in ActionBuffers actionsOut)
-    {
-        var action = actionsOut.ContinuousActions;
-        action.Clear();
+    //public override void Heuristic(in ActionBuffers actionsOut)
+    //{
+      //  var action = actionsOut.ContinuousActions;
+     //   action.Clear();
 
-        action[0] = Input.GetAxis("Horizontal");
-        action[1] = Input.GetAxis("Vertical");
-    }
+       // action[0] = Input.GetAxis("Horizontal");
+       // action[1] = Input.GetAxis("Vertical");
+        //print("Heuristic Input: [" + action[0] + ", " + action[1] + "]");
+    //}
 
 
 }

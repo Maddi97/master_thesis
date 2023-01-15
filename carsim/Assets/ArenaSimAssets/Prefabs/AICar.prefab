@@ -255,6 +255,8 @@ GameObject:
   - component: {fileID: 4883383423962247297}
   - component: {fileID: 5217431683527710702}
   - component: {fileID: 322867086427621618}
+  - component: {fileID: 2240955896825568278}
+  - component: {fileID: 4987563446243815722}
   m_Layer: 0
   m_Name: AICar
   m_TagString: Untagged
@@ -278,6 +280,7 @@ Transform:
   - {fileID: 6731444432373205037}
   - {fileID: 6118233357976585758}
   - {fileID: 207686249393659186}
+  - {fileID: 1732852869402778917}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
@@ -304,7 +307,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1360888143983817536}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 789ee1ea3d18947d88a541451cdc2f33, type: 3}
   m_Name: 
@@ -325,6 +328,7 @@ MonoBehaviour:
   rearRightWheelTransform: {fileID: 4572069554671827839}
   carBody: {fileID: 2879654619789689899}
   count: 0
+  drivingEngine: {fileID: 6193760820542181969}
 --- !u!114 &5217431683527710702
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -341,18 +345,18 @@ MonoBehaviour:
     VectorObservationSize: 1
     NumStackedVectorObservations: 1
     m_ActionSpec:
-      m_NumContinuousActions: 0
+      m_NumContinuousActions: 2
       BranchSizes: 
-    VectorActionSize: 
+    VectorActionSize: 02000000
     VectorActionDescriptions: []
-    VectorActionSpaceType: 0
+    VectorActionSpaceType: 1
     hasUpgradedBrainParametersWithActionSpec: 1
   m_Model: {fileID: 0}
   m_InferenceDevice: 0
   m_BehaviorType: 0
   m_BehaviorName: My Behavior
   TeamId: 0
-  m_UseChildSensors: 0
+  m_UseChildSensors: 1
   m_UseChildActuators: 1
   m_ObservableAttributeHandling: 0
 --- !u!114 &322867086427621618
@@ -362,7 +366,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1360888143983817536}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 45a1d5f246db83d4e9db796e9e19282e, type: 3}
   m_Name: 
@@ -379,6 +383,43 @@ MonoBehaviour:
   rearRightWheelTransform: {fileID: 7600409699930611992}
   carBody: {fileID: 2879654619789689899}
   count: 0
+--- !u!114 &2240955896825568278
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1360888143983817536}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a5c9d521e5ef4759a8246a07d52221e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DecisionPeriod: 8
+  TakeActionsBetweenDecisions: 1
+--- !u!114 &4987563446243815722
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1360888143983817536}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb828afde3bb540709e3a2c81dba42a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  motorForce: 50
+  maxSteerAngle: 30
+  frontLeftWheelCollider: {fileID: 1919713468229280084}
+  frontRightWheelCollider: {fileID: 9050088764276208563}
+  rearLeftWheelCollider: {fileID: 1490915295485531174}
+  rearRightWheelCollider: {fileID: 3583183092813988609}
+  frontLeftWheelTransform: {fileID: 5917332818174460384}
+  frontRightWheeTransform: {fileID: 6152103735393066902}
+  rearLeftWheelTransform: {fileID: 5327351620171837208}
+  rearRightWheelTransform: {fileID: 7600409699930611992}
+  carBody: {fileID: 2879654619789689899}
 --- !u!1 &1415327222390731046
 GameObject:
   m_ObjectHideFlags: 0
@@ -947,6 +988,61 @@ Transform:
   m_Father: {fileID: 6118233357976585758}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &6595411177935440665
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1732852869402778917}
+  - component: {fileID: 6193760820542181969}
+  m_Layer: 0
+  m_Name: AIEngine
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1732852869402778917
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6595411177935440665}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1849018064595741178}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6193760820542181969
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6595411177935440665}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb828afde3bb540709e3a2c81dba42a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  motorForce: 50
+  maxSteerAngle: 30
+  frontLeftWheelCollider: {fileID: 1919713468229280084}
+  frontRightWheelCollider: {fileID: 9050088764276208563}
+  rearLeftWheelCollider: {fileID: 1490915295485531174}
+  rearRightWheelCollider: {fileID: 3583183092813988609}
+  frontLeftWheelTransform: {fileID: 845723055580789616}
+  frontRightWheeTransform: {fileID: 3620777261944593728}
+  rearLeftWheelTransform: {fileID: 4652887114675770460}
+  rearRightWheelTransform: {fileID: 4572069554671827839}
+  carBody: {fileID: 2879654619789689899}
 --- !u!1 &7065269662725542962
 GameObject:
   m_ObjectHideFlags: 0

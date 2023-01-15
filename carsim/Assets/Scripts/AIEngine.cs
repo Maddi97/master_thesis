@@ -3,50 +3,36 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DrivingEngine
+public class AIEngine : MonoBehaviour
 {
 
     private float inputAcceleration;
     private float inputSteering;
     private float currentSteerAngle;
 
-    private float motorForce;
-    private float maxSteerAngle;
+    public float motorForce;
+    public float maxSteerAngle;
 
-    private WheelCollider frontLeftWheelCollider;
-    private WheelCollider frontRightWheelCollider;
-    private WheelCollider rearLeftWheelCollider;
-    private WheelCollider rearRightWheelCollider;
+    public WheelCollider frontLeftWheelCollider;
+    public WheelCollider frontRightWheelCollider;
+    public WheelCollider rearLeftWheelCollider;
+    public WheelCollider rearRightWheelCollider;
 
-    private Transform frontLeftWheelTransform;
-    private Transform frontRightWheeTransform;
-    private Transform rearLeftWheelTransform;
-    private Transform rearRightWheelTransform;
+    public Transform frontLeftWheelTransform;
+    public Transform frontRightWheeTransform;
+    public Transform rearLeftWheelTransform;
+    public Transform rearRightWheelTransform;
 
 
-    private Transform carBody;
+    public Transform carBody;
 
-    public DrivingEngine(float motorForce, float maxSteerAngle, Transform carBody, WheelCollider frontLeftWheelCollider, WheelCollider frontRightWheelCollider, WheelCollider rearLeftWheelCollider, WheelCollider rearRightWheelCollider,
-        Transform frontLeftWheelTransform, Transform frontRightWheeTransform, Transform rearLeftWheelTransform, Transform rearRightWheelTransform)
+
+    public void FixedUpdate()
     {
-
-        this.motorForce = motorForce;
-        this.maxSteerAngle = maxSteerAngle;
-
-        this.carBody = carBody;
-
-        this.frontLeftWheelCollider = frontLeftWheelCollider;
-        this.frontRightWheelCollider = frontRightWheelCollider;
-        this.rearLeftWheelCollider = rearLeftWheelCollider;
-        this.rearRightWheelCollider = rearRightWheelCollider;
-
-        this.frontLeftWheelTransform = frontLeftWheelTransform;
-        this.frontRightWheeTransform = frontRightWheeTransform;
-        this.rearLeftWheelTransform = rearLeftWheelTransform;
-        this.rearRightWheelTransform = rearRightWheelTransform;
-
-}
-
+        this.HandleMotor();
+        this.HandleSteering();
+        this.UpdateWheels();
+    }
     public void SetInput(List<float> input)
     {
         this.inputAcceleration = input[0];
