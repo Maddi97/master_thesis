@@ -8,14 +8,10 @@ public class CarController : MonoBehaviour
     private const string HORIZONTAL = "Horizontal";
     private const string VERTICAL = "Vertical";
 
-    private float horizontalInput;
-    private float verticalInput;
+
     private float currentSteerAngle;
-    private float currentbreakForce;
-    private bool isBreaking;
 
     [SerializeField] private float motorForce;
-    [SerializeField] private float breakForce;
     [SerializeField] private float maxSteerAngle;
 
     [SerializeField] private WheelCollider frontLeftWheelCollider;
@@ -28,69 +24,35 @@ public class CarController : MonoBehaviour
     [SerializeField] private Transform rearLeftWheelTransform;
     [SerializeField] private Transform rearRightWheelTransform;
     
-	[SerializeField] private UnityEngine.UI.Text text;
-	[SerializeField] private Transform car;
+
+	[SerializeField] private Transform carBody;
 	[SerializeField] public int count;
+
+    private DrivingEngine drivingEngine;
     
+    private void Awake()
+    {
+        this.drivingEngine = new DrivingEngine( this.motorForce, this.maxSteerAngle, this.carBody, this.frontLeftWheelCollider, this.frontRightWheelCollider, this.rearLeftWheelCollider, this.rearRightWheelCollider,
+            this.frontLeftWheelTransform, this.frontRightWheeTransform, this.rearLeftWheelTransform, this.rearRightWheelTransform);
+    }
 
     private void FixedUpdate()
     {
-        GetInput();
-        HandleMotor();
-        HandleSteering();
-        UpdateWheels();
+        this.drivingEngine.SetInput(this.GetInput());
+        this.drivingEngine.HandleMotor();
+        this.drivingEngine.HandleSteering();
+        this.drivingEngine.UpdateWheels();
     }
 
 
-    private void GetInput()
+    private List<float> GetInput()
     {
-        horizontalInput = Input.GetAxis(HORIZONTAL);
-        verticalInput = Input.GetAxis(VERTICAL);
-        isBreaking = Input.GetKey(KeyCode.Space);
+        float accelerationInput = Input.GetAxis(HORIZONTAL);
+        float steerInput = Input.GetAxis(VERTICAL);
+        return new List<float>(){ accelerationInput, steerInput };
     }
 
-    private void HandleMotor()
-    {
-        frontLeftWheelCollider.motorTorque = verticalInput * motorForce;
-        frontRightWheelCollider.motorTorque = verticalInput * motorForce;
-        currentbreakForce = isBreaking ? breakForce : 0f;
-        ApplyBreaking();       
-    }
-
-    private void ApplyBreaking()
-    {
-        frontRightWheelCollider.brakeTorque = currentbreakForce;
-        frontLeftWheelCollider.brakeTorque = currentbreakForce;
-        rearLeftWheelCollider.brakeTorque = currentbreakForce;
-        rearRightWheelCollider.brakeTorque = currentbreakForce;
-    }
-
-    private void HandleSteering()
-    {
-        currentSteerAngle = maxSteerAngle * horizontalInput;
-        frontLeftWheelCollider.steerAngle = currentSteerAngle;
-        frontRightWheelCollider.steerAngle = currentSteerAngle;
-    }
-
-    private void UpdateWheels()
-    {
-        UpdateSingleWheel(frontLeftWheelCollider, frontLeftWheelTransform);
-        UpdateSingleWheel(frontRightWheelCollider, frontRightWheeTransform);
-        UpdateSingleWheel(rearRightWheelCollider, rearRightWheelTransform);
-        UpdateSingleWheel(rearLeftWheelCollider, rearLeftWheelTransform);
-    }
-
-    private void UpdateSingleWheel(WheelCollider wheelCollider, Transform wheelTransform)
-    {
-        Vector3 pos;
-        Quaternion rot;
-        wheelCollider.GetWorldPose(out pos, out rot);
-        wheelTransform.rotation = rot;
-        wheelTransform.position = pos;
-        // Debug.Log(pos);
-        // (25, 87) , (-30, 90) (-30, (-25) , (24, -27)
-
-    }
+   
 
     private void OnTriggerEnter(Collider other)
     {
@@ -108,9 +70,21 @@ public class CarController : MonoBehaviour
     
     private bool isleft(Vector3 position){
         Debug.Log("is left function triggered");
-		Vector3 Dir = position - car.position;
-		Dir = Quaternion.Inverse(car.rotation) * Dir;
+		Vector3 Dir = position - carBody.position;
+		Dir = Quaternion.Inverse(carBody.rotation) * Dir;
 		return (Dir.x>0);
 	}
+
+    private float getCarVelocity()
+    {
+        // transform objects that velocity on z axis always indicates the direction -> getting the Sign givs the direction
+        float direction = Math.Sign(carBody.InverseTransformDirection(frontLeftWheelCollider.attachedRigidbody.velocity).z);
+
+        // signed speed (foreward and backward speed)
+        float velocity = direction * frontLeftWheelCollider.attachedRigidbody.velocity.magnitude;
+
+        return velocity;
+
+    }
 
 }

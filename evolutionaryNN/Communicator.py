@@ -63,8 +63,11 @@ class Communicator:
                 sock.sendto(bytes("ENDREG", "utf-8"), (self.address, self.port + 2))
                 break
             if self.dataready:
+
+
                 sock.sendto(bytes(self.datatobesend, "utf-8"), (self.address, self.port + 2))
-                # print(f"senddata {self.datatobesend}")
+                print(f"senddata {self.datatobesend} sender_port: {self.port}")
+
                 self.dataready = False
 
     def imagetoposition(self, image: bytes):
@@ -122,7 +125,9 @@ class Communicator:
                 bandreg.append(bound)
         allContours = [redreq, bluereg, bandreg]
         t = self.neuralnet.neuralnet(allContours)
-        # t = [1,0]
+        # t = [.9 , .1]
+
+        print(f"Port: {self.port} data: [{t[0]}, {t[1]}]")
         self.datatobesend = ';'.join(str(x) for x in t)
         self.dataready = True
 

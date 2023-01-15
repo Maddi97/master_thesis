@@ -6,13 +6,17 @@ import threading
 
 
 class CommunicationManager:
-    def __init__(self, port, address, botcount):
+
+    def __init__(self, port, address, numberOfBots):
         self.port = port
         self.address = address
         self.results = None
         self.running = False
-        self.botcount = botcount
+
+        # if true set number of bots in python code
         self.changedbotcount = True
+        self.numberOfBots = numberOfBots
+
         self.newresultpls = False
         self.shuffle = False
         self.eog = False
@@ -23,8 +27,8 @@ class CommunicationManager:
         self.startcommunication()
         self.botlist = []
 
-    def setbotcount(self, count):
-        self.botcount = count
+    def setNumberOfBots(self, count):
+        self.numberOfBots = count
         self.changedbotcount = True
 
     def checkresults(self):
@@ -93,7 +97,7 @@ class CommunicationManager:
                 sock.sendto(bytes("START", "utf-8"), (self.address, self.port + 2))
                 self.start = False
             if self.changedbotcount:
-                sock.sendto(bytes("BOTCOUNT;" + str(self.botcount), "utf-8"), (self.address, self.port + 2))
+                sock.sendto(bytes("BOTCOUNT;" + str(self.numberOfBots), "utf-8"), (self.address, self.port + 2))
                 self.changedbotcount = False
             if self.eog:
                 sock.sendto(bytes("EOG", "utf-8"), (self.address, self.port + 2))
