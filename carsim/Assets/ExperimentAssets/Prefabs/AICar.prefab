@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 207686249393659186}
   - component: {fileID: 207686249393659149}
-  - component: {fileID: 207686249393659148}
   - component: {fileID: 207686249393659187}
   m_Layer: 6
   m_Name: Camera
@@ -43,7 +42,7 @@ Camera:
   m_GameObject: {fileID: 207686249393659185}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 1
+  m_ClearFlags: 2
   m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
@@ -65,7 +64,7 @@ Camera:
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 823
+    m_Bits: 55
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -77,14 +76,6 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!81 &207686249393659148
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 207686249393659185}
-  m_Enabled: 0
 --- !u!114 &207686249393659187
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -252,11 +243,10 @@ GameObject:
   m_Component:
   - component: {fileID: 1849018064595741178}
   - component: {fileID: 6274593966186973266}
-  - component: {fileID: 4883383423962247297}
-  - component: {fileID: 5217431683527710702}
-  - component: {fileID: 322867086427621618}
-  - component: {fileID: 2240955896825568278}
-  - component: {fileID: 4987563446243815722}
+  - component: {fileID: 8946423428566106443}
+  - component: {fileID: 6289530371373979932}
+  - component: {fileID: 6338823975079228360}
+  - component: {fileID: 3364011995377030519}
   m_Layer: 0
   m_Name: AICar
   m_TagString: Untagged
@@ -271,7 +261,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1360888143983817536}
-  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 1, y: 0.1, z: 5}
   m_LocalScale: {x: 0.2, y: 0.2, z: 0.2}
   m_ConstrainProportionsScale: 0
@@ -283,7 +273,7 @@ Transform:
   - {fileID: 1732852869402778917}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!54 &6274593966186973266
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -300,7 +290,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &4883383423962247297
+--- !u!114 &8946423428566106443
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -309,27 +299,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1360888143983817536}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 789ee1ea3d18947d88a541451cdc2f33, type: 3}
+  m_Script: {fileID: 11500000, guid: db2d27e5e402843c3903a92fb169e1b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  agentParameters:
-    maxStep: 0
-  hasUpgradedFromAgentParameters: 1
-  MaxStep: 20
-  motorForce: 50
-  maxSteerAngle: 30
-  frontLeftWheelCollider: {fileID: 1919713468229280084}
-  frontRightWheelCollider: {fileID: 9050088764276208563}
-  rearLeftWheelCollider: {fileID: 1490915295485531174}
-  rearRightWheelCollider: {fileID: 3583183092813988609}
-  frontLeftWheelTransform: {fileID: 5917332818174460384}
-  frontRightWheeTransform: {fileID: 6152103735393066902}
-  rearLeftWheelTransform: {fileID: 5327351620171837208}
-  rearRightWheelTransform: {fileID: 4572069554671827839}
-  carBody: {fileID: 2879654619789689899}
-  count: 0
-  drivingEngine: {fileID: 6193760820542181969}
---- !u!114 &5217431683527710702
+--- !u!114 &6289530371373979932
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -359,31 +332,25 @@ MonoBehaviour:
   m_UseChildSensors: 1
   m_UseChildActuators: 1
   m_ObservableAttributeHandling: 0
---- !u!114 &322867086427621618
+--- !u!114 &6338823975079228360
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1360888143983817536}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 45a1d5f246db83d4e9db796e9e19282e, type: 3}
+  m_Script: {fileID: 11500000, guid: 789ee1ea3d18947d88a541451cdc2f33, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  motorForce: 50
-  maxSteerAngle: 30
-  frontLeftWheelCollider: {fileID: 1919713468229280084}
-  frontRightWheelCollider: {fileID: 9050088764276208563}
-  rearLeftWheelCollider: {fileID: 1490915295485531174}
-  rearRightWheelCollider: {fileID: 3583183092813988609}
-  frontLeftWheelTransform: {fileID: 5917332818174460384}
-  frontRightWheeTransform: {fileID: 6152103735393066902}
-  rearLeftWheelTransform: {fileID: 5327351620171837208}
-  rearRightWheelTransform: {fileID: 7600409699930611992}
-  carBody: {fileID: 2879654619789689899}
-  count: 0
---- !u!114 &2240955896825568278
+  agentParameters:
+    maxStep: 0
+  hasUpgradedFromAgentParameters: 1
+  MaxStep: 100
+  drivingEngine: {fileID: 6193760820542181969}
+  debugSavePictures: 1
+--- !u!114 &3364011995377030519
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -395,31 +362,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a5c9d521e5ef4759a8246a07d52221e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DecisionPeriod: 8
+  DecisionPeriod: 5
   TakeActionsBetweenDecisions: 1
---- !u!114 &4987563446243815722
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1360888143983817536}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eb828afde3bb540709e3a2c81dba42a0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  motorForce: 50
-  maxSteerAngle: 30
-  frontLeftWheelCollider: {fileID: 1919713468229280084}
-  frontRightWheelCollider: {fileID: 9050088764276208563}
-  rearLeftWheelCollider: {fileID: 1490915295485531174}
-  rearRightWheelCollider: {fileID: 3583183092813988609}
-  frontLeftWheelTransform: {fileID: 5917332818174460384}
-  frontRightWheeTransform: {fileID: 6152103735393066902}
-  rearLeftWheelTransform: {fileID: 5327351620171837208}
-  rearRightWheelTransform: {fileID: 7600409699930611992}
-  carBody: {fileID: 2879654619789689899}
 --- !u!1 &1415327222390731046
 GameObject:
   m_ObjectHideFlags: 0

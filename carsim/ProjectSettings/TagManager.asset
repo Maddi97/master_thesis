@@ -8,7 +8,8 @@ TagManager:
   - GoalMissed
   - RedObstacleTag
   - BlueObstacleTag
-  - blue
+  - FinishCheckpoint
+  - Wall
   layers:
   - Default
   - TransparentFX
@@ -16,11 +17,11 @@ TagManager:
   - 
   - Water
   - UI
-  - Bot
-  - 
-  - PostProcessing
-  - startandfinish
-  - 
+  - Vehicle
+  - GoalPassedCheckpoint
+  - GoalMissedCheckpoint
+  - FinishCheckpoint
+  - WallCheckpoint
   - 
   - 
   - 

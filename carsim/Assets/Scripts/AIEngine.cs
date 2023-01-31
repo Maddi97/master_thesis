@@ -10,7 +10,7 @@ public class AIEngine : MonoBehaviour
     private float inputSteering;
     private float currentSteerAngle;
 
-    public float motorForce;
+    public float motorForce = 100f;
     public float maxSteerAngle;
 
     public WheelCollider frontLeftWheelCollider;
@@ -77,6 +77,11 @@ public class AIEngine : MonoBehaviour
         // Debug.Log(pos);
         // (25, 87) , (-30, 90) (-30, (-25) , (24, -27)
 
+    }
+
+    public float getSteeringAngle()
+    {
+        return this.currentSteerAngle;
     }
 
 

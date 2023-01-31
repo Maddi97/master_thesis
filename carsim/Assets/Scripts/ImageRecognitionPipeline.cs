@@ -4,6 +4,7 @@ using Emgu.CV.Structure;
 using System.Collections.Generic;
 using Emgu.CV.Util;
 using System.Drawing;
+using UnityEngine;
 
 public class ImageRecognitionPipeline
 {
@@ -132,11 +133,56 @@ public class ImageRecognitionPipeline
 
     }
 
+    public List<List<Vector3>> GetCooridnates10ClosestObstacles(Vector3 position, byte[] image)
+    {
+        // versuche die 5 nächsten Roten, Gelben und Blauen auf y achse zu return (was er auf bild sieht geradeaus müsste y entfernung sein)
+        //überlegung: nach height objeckte sortieren, weil je größer desto näher dran
+        var allContours = this.getObstaclePosition(image);
+        List<Vector3> obstaclePositions = new List<Vector3>();
+        List<List<Vector3>> obstaclesSorted = new List<List<Vector3>>();
+
+        // sorts by Y ascending
+        foreach( List<Rectangle> obs in allContours )
+        {
+            obs.Sort((x, y) => x.Y.CompareTo(y.Y));
+            List<Vector3> vectorList = new List<Vector3>();
+            // create Vector from Rectangle object
+            foreach(Rectangle rect in obs)
+            {
+                Vector3 vec = new Vector3();
+                vec.x = rect.X;
+                vec.y = rect.Y;
+                vec.z = rect.Width;
+                vectorList.Add(vec);
+            }
+
+            for (int i = 0; i < 10; i++)
+            {
+                if (vectorList.Count < 10)
+                {
+                    Vector3 defaultVec = new Vector3() { x = -99, y = -99, z = -99 };
+                    vectorList.Add(defaultVec);
+                }
+            }
+
+            obstaclesSorted.Add(vectorList.GetRange(0, 10));
+        }
+
+        //fill until list is length 10 with default argument
+
+
+
+        return obstaclesSorted;
+        
+
+    }
+
     public void saveImageToPath(byte[] image, String filepath = "test.png")
     {
         var image1 = new Emgu.CV.Mat();
         CvInvoke.Imdecode(image, Emgu.CV.CvEnum.ImreadModes.Unchanged, image1);
         image1.Save(filepath);
+
     }
 
 }

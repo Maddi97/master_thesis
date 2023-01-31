@@ -19,10 +19,6 @@ public class GameManager : MonoBehaviour
 
 	public int idOfCurrentRun;
 
-	// Game objects
-	public GameObject vehicleAI; //holds bot vehicle gameobject
-	public GameObject vehicleControlled; // vehicle object that is controlled by an human
-
 	// need to load the prefabs of the obstacles in unity here
 	public GameObject obstacleBlue;
 	public GameObject obstacleRed;
@@ -32,11 +28,11 @@ public class GameManager : MonoBehaviour
 
 	// initialize obstacle Map Generator
 	private ObstacleMapManager obstacleMapManager;
-
+	private ObstacleList obstacleList;
 
 	// generate map
 	//could be selected in unity in the GameManager game object 
-	public MapType mapTypeGeneratedMap = MapType.twoGoalLanes;
+	public MapType mapTypeGeneratedMap = MapType.twoGoalLanesBlueFirstLeft;
 
 
 	// load obstacle Map
@@ -57,29 +53,13 @@ public class GameManager : MonoBehaviour
 	public bool humanPilot = true;
 
 	
-	private List<Bot> botList;
-
     // Start is called before the first frame update
     void Start()
     {
+		Vector3  gameManagerPosition = this.transform.position;
 		// load obstacles
-		this.obstacleMapManager = new ObstacleMapManager(obstacleBlue, obstacleRed, goalPassedWallCheckpoint, goalMissedWallCheckpoint);
+		this.obstacleMapManager = new ObstacleMapManager(gameManagerPosition, obstacleBlue, obstacleRed, goalPassedWallCheckpoint, goalMissedWallCheckpoint);
 		InitializeMapWithObstacles();
-
-		//get Spawn Manager
-		this.spawnManager = FindObjectOfType<SpawnManager>();
-
-		if (this.humanPilot)
-		{
-			print("Spawn Controlled Car");
-			SpawnControlledCar();
-		}
-
-		else
-		{
-			print("Spawn AI car");
-			SpawnAICar();
-		}
     }
 
 	void FixedUpdate()//FixedUpdate is called at a constant interval
@@ -94,8 +74,7 @@ public class GameManager : MonoBehaviour
     }
       
     
-    void InitializeMapWithObstacles(){
-		ObstacleList obstacleList;
+    public void InitializeMapWithObstacles(){
 
 		// load a already generated map
 		if (loadObstacles)
@@ -122,28 +101,10 @@ public class GameManager : MonoBehaviour
 		idOfCurrentRun ++;
 
 	}
-    
-    void getResult(){
-		
-	}
-    
-    void destroybots(){
-		
-	}
-    
-    void SpawnControlledCar()
+
+	public void DestroyObstaclesOnMap()
     {
-
-		Vector3 spawnPosition = spawnManager.SelectRandomSpawnpoint();
-		GameObject controlledCar = Instantiate(vehicleControlled, spawnPosition, new Quaternion(0, 1, 0, 1));
-
-	}
-
-	void SpawnAICar()
-    {
-		Vector3 spawnPosition = spawnManager.SelectRandomSpawnpoint();
-		GameObject aiCar = Instantiate(vehicleAI, spawnPosition, new Quaternion(0, 1, 0, 1));
-	}
-
+		this.obstacleMapManager.DestroyMap();
+    }
 	
 }

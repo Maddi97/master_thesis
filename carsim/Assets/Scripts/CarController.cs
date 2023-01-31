@@ -51,30 +51,8 @@ public class CarController : MonoBehaviour
         float steerInput = Input.GetAxis(VERTICAL);
         return new List<float>(){ accelerationInput, steerInput };
     }
-
-   
-
-    private void OnTriggerEnter(Collider other)
-    {
-	    if (other.tag == "red" && !(isleft(other.transform.position))){
-			
-		   count++;
-		}else if(other.tag == "blue" && isleft(other.transform.position)){
-			count++;
-		}else{
-			Debug.Log("Tag Problem:"+other.tag);
-		}
-		//text.text = b.ToString();
-	    
-    }
     
-    private bool isleft(Vector3 position){
-        Debug.Log("is left function triggered");
-		Vector3 Dir = position - carBody.position;
-		Dir = Quaternion.Inverse(carBody.rotation) * Dir;
-		return (Dir.x>0);
-	}
-
+  
     private float getCarVelocity()
     {
         // transform objects that velocity on z axis always indicates the direction -> getting the Sign givs the direction
