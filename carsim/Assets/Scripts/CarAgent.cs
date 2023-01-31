@@ -55,7 +55,7 @@ public class CarAgent : Agent
         // after very action add 1 / distance to finishline as reward
         float distance = Vector3.Distance(this.gameObject.transform.localPosition, this.finishLine.transform.localPosition);
         //print("Distance: " + distance);
-        this.AddReward(-1 * (distance/1000));
+        this.AddReward(-1 * (distance/100));
 
 
         //print(debugObservations);

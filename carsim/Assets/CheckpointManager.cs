@@ -23,12 +23,12 @@ public class CheckpointManager : MonoBehaviour
         if (other.tag == "BlueObstacleTag")
         {
             Debug.Log("Hit blue obstace");
-            this.carAgent.AddReward(-0.5f);
+            this.carAgent.AddReward(-5f);
         }
         if (other.tag == "RedObstacleTag")
         {
             Debug.Log("Hit red obstace");
-            this.carAgent.AddReward(-0.5f);
+            this.carAgent.AddReward(-5f);
         }
         if (other.tag == "GoalPassed")
         {
@@ -47,7 +47,7 @@ public class CheckpointManager : MonoBehaviour
         else if (other.tag == "Wall")
         {
             Debug.Log("Wall punishment");
-            this.carAgent.AddReward(-0.5f);
+            this.carAgent.AddReward(-5f);
         }
         else if(other.tag == "FinishCheckpoint")
         {
