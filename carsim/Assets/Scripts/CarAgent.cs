@@ -10,14 +10,19 @@ using System.IO;
 public class CarAgent : Agent
 {
 
+
     public AIEngine drivingEngine;
     private bool debugSavePictures = false;
+
+    // for debugging its public, then you can lift the TimeLimit in unity
+    public float TimeLeft = 10f;
+    private float t = 0f;
 
     private ImageRecognitionPipeline imagePreprocess;
     private Camera cam;
     private SpawnManager spawnManager;
-    private int resWidth = 256;
-    private int resHeight = 64;
+    private int resWidth = 512;
+    private int resHeight = 128;
     private GameObject finishLine;
     private GameManager gameManager;
 
@@ -35,12 +40,24 @@ public class CarAgent : Agent
 
     public override void OnEpisodeBegin()
     {
+        this.t = 0f;
         //on every restart clear map and load map again
         this.gameManager.DestroyObstaclesOnMap();
         this.gameManager.InitializeMapWithObstacles();
         this.Respawn();
     }
 
+    public void FixedUpdate()
+    {
+        this.t += Time.deltaTime;
+        if (this.t >= this.TimeLeft)
+        {
+            this.AddReward(-1f);
+            this.EndEpisode();
+            UnityEngine.Debug.Log("Ended episode because of time");
+
+        }
+    }
 
     public override void OnActionReceived(ActionBuffers actions)
     {
@@ -55,8 +72,7 @@ public class CarAgent : Agent
         // after very action add 1 / distance to finishline as reward
         float distance = Vector3.Distance(this.gameObject.transform.localPosition, this.finishLine.transform.localPosition);
         //print("Distance: " + distance);
-        this.AddReward(-1 * (distance/100));
-
+        //this.AddReward(-1 * (distance/100));
 
         //print(debugObservations);
     }
@@ -66,31 +82,52 @@ public class CarAgent : Agent
     {
 
         Byte[] cameraPicture = this.GetCameraInput();
-
-        List<List<Vector3>> obstacePositions = this.imagePreprocess.GetCooridnates10ClosestObstacles(this.transform.position, cameraPicture);
+        this.imagePreprocess.saveImageToPath(cameraPicture, "camPic.png");
+        List<List<Vector4>> obstacePositions = this.imagePreprocess.GetCooridnatesNClosestObstacles(this.transform.position, cameraPicture, n: 4);
 
         // add speed input
-        sensor.AddObservation(this.drivingEngine.getCarVelocity());
+        //sensor.AddObservation(this.drivingEngine.getCarVelocity());
+
+        //add actual rotation of object x is up and down
+
+        //TODO check if local rotation true for every car
+        sensor.AddObservation(this.transform.localEulerAngles.y);
+        sensor.AddObservation(this.transform.localEulerAngles.z);
+
 
         //add actual steering
         sensor.AddObservation(this.drivingEngine.getSteeringAngle());
 
+       // add sensor for 3 nearest recognized red obstacles
+       foreach(Vector4 rect in obstacePositions[0])
+        {
+            sensor.AddObservation(rect.x);
+            sensor.AddObservation(rect.y);
+            sensor.AddObservation(rect.w);
+            sensor.AddObservation(rect.z);
+
+        }
+       
        // add sensor for 3 nearest recognized blue obstacles
+       foreach(Vector4 rect in obstacePositions[1])
+        {
+            sensor.AddObservation(rect.x);
+            sensor.AddObservation(rect.y);
+            sensor.AddObservation(rect.w);
+            sensor.AddObservation(rect.z);
 
-       sensor.AddObservation(obstacePositions[0][0]);
-       sensor.AddObservation(obstacePositions[0][1]);
-       sensor.AddObservation(obstacePositions[0][2]);
+        }
+       
+       // add sensor for 3 nearest recognized yellow obstacles
+       foreach(Vector4 rect in obstacePositions[2])
+        {
+            sensor.AddObservation(rect.x);
+            sensor.AddObservation(rect.y);
+            sensor.AddObservation(rect.w);
+            sensor.AddObservation(rect.z);
 
-       // // add sensor for 3 nearest recognized red obstacles
-       sensor.AddObservation(obstacePositions[1][0]);
-       sensor.AddObservation(obstacePositions[1][1]);
-       sensor.AddObservation(obstacePositions[1][2]);
-
-       // // add sensor for 3 nearest recognized yellow obstacles
-       sensor.AddObservation(obstacePositions[2][0]);
-       sensor.AddObservation(obstacePositions[2][1]);
-       sensor.AddObservation(obstacePositions[2][2]);
-
+        }
+       
     }
 
     //Get the AI vehicles camera input encode as byte array
@@ -138,5 +175,9 @@ public class CarAgent : Agent
         //print("Heuristic Input: [" + action[0] + ", " + action[1] + "]");
     }
 
+    public void AddTime(float time)
+    {
+        this.t -= time;
+    }
 
 }

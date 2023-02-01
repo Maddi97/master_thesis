@@ -8,7 +8,13 @@ using UnityEngine;
 
 public class ImageRecognitionPipeline
 {
-   
+
+    //veriables for debugging
+    String debugPicturePath = "debugPictures/";
+    Boolean saveContours = true;
+
+    Boolean saveHsvImage = false;
+    Boolean saveDecodedImage = true;
     // find contours of all red, blue obstacles and boundery in image                           h
     public List<List<Rectangle>> getObstaclePosition(byte[] image)
     {
@@ -22,23 +28,24 @@ public class ImageRecognitionPipeline
         Image<Gray, Byte> blueImage = new Mat().ToImage<Gray, Byte>();
 
 
-
         CvInvoke.Imdecode(image, Emgu.CV.CvEnum.ImreadModes.Unchanged, imageDecoded);
+        if (saveDecodedImage)
+        {
+            imageDecoded.Save(debugPicturePath + "cameraImage.png");
+        }
         var height = imageDecoded.Height;
         var width = imageDecoded.Width;
         CvInvoke.CvtColor(imageDecoded, imageHsv, Emgu.CV.CvEnum.ColorConversion.Bgr2Hsv);
-
         //detect bounderies
-        ScalarArray lowerBound = new ScalarArray(new MCvScalar(3, 106, 0));
-        ScalarArray upperBound = new ScalarArray(new MCvScalar(60, 202, 165));
+        ScalarArray lowerBound = new ScalarArray(new MCvScalar(20, 100, 100));
+        ScalarArray upperBound = new ScalarArray(new MCvScalar(40, 255, 255));
 
         CvInvoke.InRange(imageHsv, lowerBound, upperBound, inRange);
         CvInvoke.Threshold(inRange, boundImage, 70, 255, Emgu.CV.CvEnum.ThresholdType.Binary);
 
         //detect red obstacles
-        ScalarArray lowerRed = new ScalarArray(new MCvScalar(4, 0, 19));
-        ScalarArray upperRed = new ScalarArray(new MCvScalar(136, 234, 205));
-
+        ScalarArray lowerRed = new ScalarArray(new MCvScalar(0, 50, 50));
+        ScalarArray upperRed = new ScalarArray(new MCvScalar(10, 255, 255));
 
         CvInvoke.InRange(imageHsv, lowerRed, upperRed, redRange);
         CvInvoke.Threshold(redRange, redImage, 70, 255, Emgu.CV.CvEnum.ThresholdType.Binary);
@@ -46,11 +53,20 @@ public class ImageRecognitionPipeline
         //detect blue obstacles
         ScalarArray lowerBlue = new ScalarArray(new MCvScalar(110, 0, 99));
         ScalarArray upperBlue = new ScalarArray(new MCvScalar(114, 231, 138));
-
-
+        if (saveHsvImage)
+        {
+            imageHsv.Save(debugPicturePath + "hsv.png");
+        }
         CvInvoke.InRange(imageHsv, lowerBlue, upperBlue, blueRange);
         CvInvoke.Threshold(blueRange, blueImage, 70, 255, Emgu.CV.CvEnum.ThresholdType.Binary);
+        //var hsvRed =Emgu.CV.CvInvoke.CvtColor(greenBGR)
+        if (saveContours)
+        {
+            boundImage.Save(debugPicturePath + "boundImageContours.png");
+            redImage.Save(debugPicturePath + "red_test.png");
+            blueImage.Save(debugPicturePath + "blue_test.png");
 
+        }
         // find contours boundaries
         VectorOfVectorOfPoint boundObstacleContours = new VectorOfVectorOfPoint();
         Mat boundObstaclesHierarchy = new Emgu.CV.Mat();
@@ -66,14 +82,13 @@ public class ImageRecognitionPipeline
         CvInvoke.FindContours(redImage, redObstacleContours, redObstaclesHierarchy,
             Emgu.CV.CvEnum.RetrType.Tree, Emgu.CV.CvEnum.ChainApproxMethod.ChainApproxSimple);
 
-
+       
         // find contours blue obstacles
         VectorOfVectorOfPoint blueObstacleContours = new VectorOfVectorOfPoint();
         Mat blueObstaclesHierarchy = new Emgu.CV.Mat();
 
         CvInvoke.FindContours(blueImage, blueObstacleContours, blueObstaclesHierarchy,
             Emgu.CV.CvEnum.RetrType.Tree, Emgu.CV.CvEnum.ChainApproxMethod.ChainApproxSimple);
-
 
 
         // calculate area and remove small elements (potential wrong detected areas)
@@ -109,7 +124,7 @@ public class ImageRecognitionPipeline
         }
 
         //red obstacles rectangles
-        Point[][] redObstacleContoursArray = blueObstacleContours.ToArrayOfArray();
+        Point[][] redObstacleContoursArray = redObstacleContours.ToArrayOfArray();
 
         List<Rectangle> redObstacles = new List<Rectangle>();
 
@@ -133,42 +148,44 @@ public class ImageRecognitionPipeline
 
     }
 
-    public List<List<Vector3>> GetCooridnates10ClosestObstacles(Vector3 position, byte[] image)
+    public List<List<Vector4>> GetCooridnatesNClosestObstacles(Vector3 position, byte[] image, int n = 4)
     {
         // versuche die 5 nächsten Roten, Gelben und Blauen auf y achse zu return (was er auf bild sieht geradeaus müsste y entfernung sein)
         //überlegung: nach height objeckte sortieren, weil je größer desto näher dran
         var allContours = this.getObstaclePosition(image);
-        List<Vector3> obstaclePositions = new List<Vector3>();
-        List<List<Vector3>> obstaclesSorted = new List<List<Vector3>>();
+        List<Vector4> obstaclePositions = new List<Vector4>();
+        List<List<Vector4>> obstaclesSorted = new List<List<Vector4>>();
 
-        // sorts by Y ascending
+        // sorts by Y ascending (y is distance to vehicle)
         foreach( List<Rectangle> obs in allContours )
         {
             obs.Sort((x, y) => x.Y.CompareTo(y.Y));
-            List<Vector3> vectorList = new List<Vector3>();
+            List<Vector4> vectorList = new List<Vector4>();
             // create Vector from Rectangle object
             foreach(Rectangle rect in obs)
             {
-                Vector3 vec = new Vector3();
+                Vector4 vec = new Vector4();
                 vec.x = rect.X;
                 vec.y = rect.Y;
-                vec.z = rect.Width;
+                vec.w = rect.Width;
+                vec.z = rect.Height;
                 vectorList.Add(vec);
             }
 
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < n; i++)
             {
-                if (vectorList.Count < 10)
+                if (vectorList.Count < n)
                 {
-                    Vector3 defaultVec = new Vector3() { x = -99, y = -99, z = -99 };
+                    Vector4 defaultVec = new Vector4() { x = 1000, y = 1000, z = 1, w = 1 };
                     vectorList.Add(defaultVec);
                 }
             }
+            //fill until list is length n with default argument
 
-            obstaclesSorted.Add(vectorList.GetRange(0, 10));
+            obstaclesSorted.Add(vectorList.GetRange(0, n));
         }
 
-        //fill until list is length 10 with default argument
+        //fill until list is length n with default argument
 
 
 
