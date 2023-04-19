@@ -16,16 +16,19 @@ public class CarAgent : Agent
 
     // for debugging its public, then you can lift the TimeLimit in unity
     public float TimeLeft = 10f;
-    private float t = 0f;
+    public float t = 0f;
 
     private ImageRecognitionPipeline imagePreprocess;
     private Camera cam;
     private SpawnManager spawnManager;
     private int resWidth = 512;
-    private int resHeight = 128;
+    private int resHeight = 256;
     private GameObject finishLine;
     private GameManager gameManager;
-
+    private int numberOfObstaclesPerType = 4;
+    private int numberMemoryTraces = 5;
+    private List<List<List<Vector4>>> rememberObstaclePositions;
+    
     public override void Initialize()
     {
         this.imagePreprocess = new ImageRecognitionPipeline();
@@ -35,7 +38,7 @@ public class CarAgent : Agent
         //get spawn manager
         this.spawnManager = transform.parent.gameObject.GetComponentInChildren<SpawnManager>();
         //this.gameManager.InitializeMapWithObstacles();
-
+        this.rememberObstaclePositions = this.InitializeObstacleMemory();
     }
 
     public override void OnEpisodeBegin()
@@ -44,15 +47,32 @@ public class CarAgent : Agent
         //on every restart clear map and load map again
         this.gameManager.DestroyObstaclesOnMap();
         this.gameManager.InitializeMapWithObstacles();
+        this.rememberObstaclePositions = this.InitializeObstacleMemory();
         this.Respawn();
     }
 
     public void FixedUpdate()
     {
+        //small reward for speed
+        // Debug.Log(this.drivingEngine.getCarVelocity() / 100f);
+        
         this.t += Time.deltaTime;
+        //float distance = Vector3.Distance(this.gameObject.transform.localPosition, this.finishLine.transform.localPosition);
+        //float distanceReward = 1 / distance;
+
+        float velo = this.drivingEngine.getCarVelocity();
+
+        Debug.Log(velo);
+        //this.AddReward(distanceReward * Time.deltaTime);
+        if(velo > 0)
+        {
+            this.AddReward((velo / 20f ) * Time.deltaTime);
+
+        }
+        //Debug.Log(this.t);
+        //this.AddReward(-0.01f * Time.deltaTime);
         if (this.t >= this.TimeLeft)
         {
-            this.AddReward(-1f);
             this.EndEpisode();
             UnityEngine.Debug.Log("Ended episode because of time");
 
@@ -82,11 +102,12 @@ public class CarAgent : Agent
     {
 
         Byte[] cameraPicture = this.GetCameraInput();
-        this.imagePreprocess.saveImageToPath(cameraPicture, "camPic.png");
-        List<List<Vector4>> obstacePositions = this.imagePreprocess.GetCooridnatesNClosestObstacles(this.transform.position, cameraPicture, n: 4);
+        //this.imagePreprocess.saveImageToPath(cameraPicture, "camPic.png");
+        List<List<Vector4>> obstaclePositions = this.imagePreprocess.GetCooridnatesNClosestObstacles(this.transform.position, cameraPicture, n: numberOfObstaclesPerType);
 
+        this.rememberObstaclePositions = this.imagePreprocess.TraceObstcalePosition(obstaclePositions, this.rememberObstaclePositions);
         // add speed input
-        //sensor.AddObservation(this.drivingEngine.getCarVelocity());
+        sensor.AddObservation(this.drivingEngine.getCarVelocity());
 
         //add actual rotation of object x is up and down
 
@@ -98,35 +119,11 @@ public class CarAgent : Agent
         //add actual steering
         sensor.AddObservation(this.drivingEngine.getSteeringAngle());
 
-       // add sensor for 3 nearest recognized red obstacles
-       foreach(Vector4 rect in obstacePositions[0])
-        {
-            sensor.AddObservation(rect.x);
-            sensor.AddObservation(rect.y);
-            sensor.AddObservation(rect.w);
-            sensor.AddObservation(rect.z);
+        //only add current observed obstacles without memory
+        //this.AddObstacleObservationWithoutMemory(sensor, obstaclePositions);
 
-        }
-       
-       // add sensor for 3 nearest recognized blue obstacles
-       foreach(Vector4 rect in obstacePositions[1])
-        {
-            sensor.AddObservation(rect.x);
-            sensor.AddObservation(rect.y);
-            sensor.AddObservation(rect.w);
-            sensor.AddObservation(rect.z);
-
-        }
-       
-       // add sensor for 3 nearest recognized yellow obstacles
-       foreach(Vector4 rect in obstacePositions[2])
-        {
-            sensor.AddObservation(rect.x);
-            sensor.AddObservation(rect.y);
-            sensor.AddObservation(rect.w);
-            sensor.AddObservation(rect.z);
-
-        }
+        // add with memory
+        this.AddObstaclePositionsWithMemory(sensor, this.rememberObstaclePositions);
        
     }
 
@@ -161,6 +158,7 @@ public class CarAgent : Agent
         theRB.MoveRotation(spawnRotation);
         transform.localRotation = spawnRotation;
         transform.localPosition = pos - new Vector3(0, 0.4f, 0);
+        this.drivingEngine.ResetMotor();
     }
 
 
@@ -180,4 +178,76 @@ public class CarAgent : Agent
         this.t -= time;
     }
 
+
+    public void AddObstaclePositionsWithMemory(VectorSensor sensor, List<List<List<Vector4>>> obstaclePositionsMemory)
+    {
+        foreach(var obstaclePositions in obstaclePositionsMemory)
+        {
+            this.AddObstacleObservationWithoutMemory(sensor, obstaclePositions);
+        }
+    }
+
+    public void AddObstacleObservationWithoutMemory(VectorSensor sensor, List<List<Vector4>> obstaclePositions)
+    {
+        // add sensor for 3 nearest recognized red obstacles
+        foreach (Vector4 rect in obstaclePositions[0])
+        {
+            sensor.AddObservation(rect.x);
+            sensor.AddObservation(rect.y);
+            sensor.AddObservation(rect.w);
+            sensor.AddObservation(rect.z);
+
+        }
+
+        // add sensor for 3 nearest recognized blue obstacles
+        foreach (Vector4 rect in obstaclePositions[1])
+        {
+            sensor.AddObservation(rect.x);
+            sensor.AddObservation(rect.y);
+            sensor.AddObservation(rect.w);
+            sensor.AddObservation(rect.z);
+
+        }
+
+        // add sensor for 3 nearest recognized yellow obstacles
+        foreach (Vector4 rect in obstaclePositions[2])
+        {
+            sensor.AddObservation(rect.x);
+            sensor.AddObservation(rect.y);
+            sensor.AddObservation(rect.w);
+            sensor.AddObservation(rect.z);
+
+        }
+    }
+
+    public List<List<List<Vector4>>> InitializeObstacleMemory()
+    {
+        var outerList = new List<List<List<Vector4>>>();
+        for (int i = 0; i < this.numberMemoryTraces; i++)
+        {
+            //blue red and wall
+            var middleList = new List<List<Vector4>>();
+            for (int j = 0; j < 3; j++)
+            {
+                var innerList = new List<Vector4>();
+                for (int k = 0; k < this.numberOfObstaclesPerType; k++)
+                {
+                    innerList.Add(new Vector4());
+                }
+                middleList.Add(innerList);
+            }
+            outerList.Add(middleList);
+        }
+        return outerList;
+    }
+
+    public void ResetMotor()
+    {
+        this.drivingEngine.ResetMotor();
+    }
+
+    public float getTime()
+    {
+        return this.t;
+    }
 }

@@ -26,7 +26,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 207686249393659185}
   m_LocalRotation: {x: 0.04811218, y: -0, z: -0, w: 0.99884194}
-  m_LocalPosition: {x: -0.19, y: 2.57, z: 1.16}
+  m_LocalPosition: {x: -0.19, y: 2.69, z: 1.17}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -315,7 +315,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BrainParameters:
-    VectorObservationSize: 1
+    VectorObservationSize: 244
     NumStackedVectorObservations: 1
     m_ActionSpec:
       m_NumContinuousActions: 2
@@ -349,7 +349,8 @@ MonoBehaviour:
   hasUpgradedFromAgentParameters: 1
   MaxStep: 100
   drivingEngine: {fileID: 6193760820542181969}
-  debugSavePictures: 1
+  TimeLeft: 10
+  t: 0
 --- !u!114 &3364011995377030519
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -362,8 +363,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a5c9d521e5ef4759a8246a07d52221e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DecisionPeriod: 5
-  TakeActionsBetweenDecisions: 1
+  DecisionPeriod: 10
+  TakeActionsBetweenDecisions: 0
 --- !u!1 &1415327222390731046
 GameObject:
   m_ObjectHideFlags: 0
@@ -976,16 +977,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb828afde3bb540709e3a2c81dba42a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  motorForce: 50
-  maxSteerAngle: 30
-  frontLeftWheelCollider: {fileID: 1919713468229280084}
-  frontRightWheelCollider: {fileID: 9050088764276208563}
-  rearLeftWheelCollider: {fileID: 1490915295485531174}
-  rearRightWheelCollider: {fileID: 3583183092813988609}
+  maxTorque: 100
+  maxSteeringAngle: 30
+  frontLeftWheelCollider: {fileID: 0}
+  frontRightWheelCollider: {fileID: 0}
+  rearLeftWheelCollider: {fileID: 0}
+  rearRightWheelCollider: {fileID: 0}
   frontLeftWheelTransform: {fileID: 845723055580789616}
   frontRightWheeTransform: {fileID: 3620777261944593728}
-  rearLeftWheelTransform: {fileID: 4652887114675770460}
-  rearRightWheelTransform: {fileID: 4572069554671827839}
+  rearLeftWheelTransform: {fileID: 0}
+  rearRightWheelTransform: {fileID: 0}
   carBody: {fileID: 2879654619789689899}
 --- !u!1 &7065269662725542962
 GameObject:

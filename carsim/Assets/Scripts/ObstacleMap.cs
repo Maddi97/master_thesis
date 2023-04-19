@@ -8,7 +8,7 @@ using Random = System.Random;
 
 static class Constants
 {
-    public const int MIN_X = 4;
+    public const int MIN_X = 5;
     public const int MAX_X = 18;
     public const int X_WIDTH = 14;
 
@@ -222,19 +222,19 @@ public class ObstacleMapManager : MonoBehaviour
             { 
             case MapType.random:
                 obstacles = this.GenerateRandomObstacleMap();
-                Debug.Log("Random Map generated");
+                //Debug.Log("Random Map generated");
                 break;
             case MapType.easyGoalLaneMiddleBlueFirst:
                 obstacles = this.GenerateEasyGoalLaneMiddleMap(true);
-                Debug.Log("Easy middle lane with blue obstacles first map generated");
+                //Debug.Log("Easy middle lane with blue obstacles first map generated");
                 break;
             case MapType.easyGoalLaneMiddleRedFirst:
                 obstacles = this.GenerateEasyGoalLaneMiddleMap(false);
-                Debug.Log("Easy middle lane with red obstacles first map generated");
+                //Debug.Log("Easy middle lane with red obstacles first map generated");
                 break;
             case MapType.twoGoalLanesBlueFirstLeft:
                 obstacles = this.GenerateTwoGoalLanesMap(true, true);
-                Debug.Log("Two lanes map with blue obstacles first generated");
+                //Debug.Log("Two lanes map with blue obstacles first generated");
                 break;
             case MapType.twoGoalLanesBlueFirstRight:
                 obstacles = this.GenerateTwoGoalLanesMap(true, false);

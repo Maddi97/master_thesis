@@ -1,0 +1,47 @@
+{
+    "name": "root",
+    "metadata": {
+        "timer_format_version": "0.1.0",
+        "start_time_seconds": "1676462196",
+        "python_version": "3.9.13 (main, May 24 2022, 21:28:31) \n[Clang 13.1.6 (clang-1316.0.21.2)]",
+        "command_line_arguments": "/usr/local/bin/mlagents-learn configWithoutMemoryNetwork.yaml --time-scale=40 --run-id=Test --force",
+        "mlagents_version": "0.30.0",
+        "mlagents_envs_version": "0.30.0",
+        "communication_protocol_version": "1.5.0",
+        "pytorch_version": "1.8.1",
+        "numpy_version": "1.21.2",
+        "end_time_seconds": "1676462203"
+    },
+    "total": 7.307879437,
+    "count": 1,
+    "self": 0.009916560999999824,
+    "children": {
+        "run_training.setup": {
+            "total": 0.0361595509999999,
+            "count": 1,
+            "self": 0.0361595509999999
+        },
+        "TrainerController.start_learning": {
+            "total": 7.261803325000001,
+            "count": 1,
+            "self": 0.00045308400000187987,
+            "children": {
+                "TrainerController._reset_env": {
+                    "total": 7.261335569,
+                    "count": 1,
+                    "self": 7.261335569
+                },
+                "trainer_threads": {
+                    "total": 9.240000000687587e-07,
+                    "count": 1,
+                    "self": 9.240000000687587e-07
+                },
+                "TrainerController._save_models": {
+                    "total": 1.3747999998869886e-05,
+                    "count": 1,
+                    "self": 1.3747999998869886e-05
+                }
+            }
+        }
+    }
+}

@@ -6,12 +6,13 @@ using UnityEngine;
 public class AIEngine : MonoBehaviour
 {
 
-    private float inputAcceleration;
-    private float inputSteering;
+    private float inputAccelerationLeft;
+    private float inputAccelerationRight;
     private float currentSteerAngle;
 
-    public float motorForce = 100f;
-    public float maxSteerAngle;
+    public float maxTorque = 100f;
+    public float maxSteeringAngle = 45f;
+
 
     public WheelCollider frontLeftWheelCollider;
     public WheelCollider frontRightWheelCollider;
@@ -30,13 +31,13 @@ public class AIEngine : MonoBehaviour
     public void FixedUpdate()
     {
         this.HandleMotor();
-        this.HandleSteering();
         this.UpdateWheels();
     }
     public void SetInput(List<float> input)
     {
-        this.inputAcceleration = input[0];
-        this.inputSteering = input[1];
+        //TODO vertauscht
+        this.inputAccelerationLeft = input[1];
+        this.inputAccelerationRight = input[0];
     }
 
     public void HandleMotor()
@@ -47,16 +48,43 @@ public class AIEngine : MonoBehaviour
         float resistance = (this.getCarVelocity() * 10f) + Math.Sign(this.getCarVelocity()) * 15f;
 
 
-        frontLeftWheelCollider.motorTorque = (inputSteering * motorForce) - resistance;
-        frontRightWheelCollider.motorTorque = (inputSteering * motorForce) - resistance;
+        //frontLeftWheelCollider.motorTorque = (inputAccelerationLeft * motorForce) - resistance;
+        //frontRightWheelCollider.motorTorque = (inputAccelerationRight * motorForce) - resistance;
+
+
+        // Calculate steering angle for each wheel based on difference in acceleration
+        float accelerationDiff = Math.Abs(this.inputAccelerationRight) - Math.Abs( this.inputAccelerationLeft);
+        float steeringAngle = maxSteeringAngle * accelerationDiff;
+ 
+        // Apply differential torque to the wheels based on steering angle
+        //leftTorque *= 1 - differentialFactor * Mathf.Abs(steeringAngle);
+        //rightTorque *= 1 + differentialFactor * Mathf.Abs(steeringAngle);
+
+        // Apply torque and steering angle to the left wheel
+        frontLeftWheelCollider.motorTorque = (inputAccelerationLeft * this.maxTorque) - resistance; ;
+        frontLeftWheelCollider.steerAngle = steeringAngle;
+
+        // Apply torque and steering angle to the right wheel
+        frontRightWheelCollider.motorTorque = (inputAccelerationRight * this.maxTorque) - resistance;
+        frontRightWheelCollider.steerAngle = steeringAngle;
 
     }
 
-    public void HandleSteering()
+    public void ResetMotor()
     {
-        currentSteerAngle = maxSteerAngle * inputAcceleration;
-        frontLeftWheelCollider.steerAngle = currentSteerAngle;
-        frontRightWheelCollider.steerAngle = currentSteerAngle;
+
+        this.inputAccelerationLeft = 0;
+        this.inputAccelerationRight = 0;
+        frontLeftWheelCollider.steerAngle = 0;
+        frontRightWheelCollider.steerAngle = 0;
+
+        frontLeftWheelCollider.motorTorque = 0;
+        frontRightWheelCollider.motorTorque = 0;
+        frontLeftWheelCollider.attachedRigidbody.velocity = Vector3.zero;
+        frontRightWheelCollider.attachedRigidbody.angularVelocity = Vector3.zero;
+
+
+
     }
 
     public void UpdateWheels()
@@ -81,9 +109,9 @@ public class AIEngine : MonoBehaviour
 
     public float getSteeringAngle()
     {
-        return this.currentSteerAngle;
+        //TODO check if correct angle gives back 90° should have 0
+        return this.carBody.eulerAngles.y;
     }
-
 
     public float getCarVelocity()
     {

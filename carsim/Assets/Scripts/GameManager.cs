@@ -64,7 +64,7 @@ public class GameManager : MonoBehaviour
 
 	void FixedUpdate()//FixedUpdate is called at a constant interval
     {
-		
+
 	}
 
     // Update is called once per frame

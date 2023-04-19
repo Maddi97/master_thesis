@@ -11,10 +11,10 @@ public class ImageRecognitionPipeline
 
     //veriables for debugging
     String debugPicturePath = "debugPictures/";
-    Boolean saveContours = true;
+    Boolean saveContours = false;
 
     Boolean saveHsvImage = false;
-    Boolean saveDecodedImage = true;
+    Boolean saveDecodedImage = false;
     // find contours of all red, blue obstacles and boundery in image                           h
     public List<List<Rectangle>> getObstaclePosition(byte[] image)
     {
@@ -176,7 +176,7 @@ public class ImageRecognitionPipeline
             {
                 if (vectorList.Count < n)
                 {
-                    Vector4 defaultVec = new Vector4() { x = 1000, y = 1000, z = 1, w = 1 };
+                    Vector4 defaultVec = new Vector4();
                     vectorList.Add(defaultVec);
                 }
             }
@@ -194,7 +194,19 @@ public class ImageRecognitionPipeline
 
     }
 
-    public void saveImageToPath(byte[] image, String filepath = "test.png")
+    public List<List<List<Vector4>>> TraceObstcalePosition(List<List<Vector4>> position, List<List<List<Vector4>>> nPositions) {
+        //move all elements foreward
+        for ( int i = nPositions.Count-1; i > 0; i--)
+        {
+            nPositions[i] = nPositions[i-1];
+        }
+        //set new Last element as first
+        nPositions[0] = position;
+
+        return nPositions;
+    }
+
+    public void SaveImageToPath(byte[] image, String filepath = "test.png")
     {
         var image1 = new Emgu.CV.Mat();
         CvInvoke.Imdecode(image, Emgu.CV.CvEnum.ImreadModes.Unchanged, image1);

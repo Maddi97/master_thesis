@@ -123,6 +123,24 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!4 &517950731 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6287492336138435979, guid: 18427ebb0adc243168945cc710cbe43c,
+    type: 3}
+  m_PrefabInstance: {fileID: 7508320809337362587}
+  m_PrefabAsset: {fileID: 0}
+--- !u!146 &680678103 stripped
+WheelCollider:
+  m_CorrespondingSourceObject: {fileID: 8971771277619401426, guid: 18427ebb0adc243168945cc710cbe43c,
+    type: 3}
+  m_PrefabInstance: {fileID: 7508320809337362587}
+  m_PrefabAsset: {fileID: 0}
+--- !u!146 &998566202 stripped
+WheelCollider:
+  m_CorrespondingSourceObject: {fileID: 8257025306800744352, guid: 18427ebb0adc243168945cc710cbe43c,
+    type: 3}
+  m_PrefabInstance: {fileID: 7508320809337362587}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1202333415
 GameObject:
   m_ObjectHideFlags: 0
@@ -191,13 +209,106 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1202333415}
   m_LocalRotation: {x: 0.36113665, y: 0.6178328, z: -0.38022196, w: 0.5859132}
-  m_LocalPosition: {x: -15.87, y: 14.91, z: 27.57}
+  m_LocalPosition: {x: -0.16, y: 5.45, z: 19.49}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 63.255, y: 93.092, z: 0.088}
+--- !u!146 &1286790756 stripped
+WheelCollider:
+  m_CorrespondingSourceObject: {fileID: 1561260566926718279, guid: 18427ebb0adc243168945cc710cbe43c,
+    type: 3}
+  m_PrefabInstance: {fileID: 7508320809337362587}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1633366925
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1633366927}
+  - component: {fileID: 1633366926}
+  m_Layer: 0
+  m_Name: OverviewCam (3)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!20 &1633366926
+Camera:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1633366925}
+  m_Enabled: 1
+  serializedVersion: 2
+  m_ClearFlags: 1
+  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_projectionMatrixMode: 1
+  m_GateFitMode: 2
+  m_FOVAxisMode: 0
+  m_SensorSize: {x: 36, y: 24}
+  m_LensShift: {x: 0, y: 0}
+  m_FocalLength: 50
+  m_NormalizedViewPortRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 2
+    height: 2
+  near clip plane: 0.7
+  far clip plane: 1e+12
+  field of view: 92.9
+  orthographic: 0
+  orthographic size: 5
+  m_Depth: 0
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_RenderingPath: -1
+  m_TargetTexture: {fileID: 0}
+  m_TargetDisplay: 3
+  m_TargetEye: 3
+  m_HDR: 1
+  m_AllowMSAA: 1
+  m_AllowDynamicResolution: 0
+  m_ForceIntoRT: 0
+  m_OcclusionCulling: 1
+  m_StereoConvergence: 10
+  m_StereoSeparation: 0.022
+--- !u!4 &1633366927
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1633366925}
+  m_LocalRotation: {x: 0.36113665, y: 0.6178328, z: -0.38022196, w: 0.5859132}
+  m_LocalPosition: {x: -38.089592, y: 5.392872, z: 74.759995}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 63.255, y: 93.092, z: 0.088}
+--- !u!4 &1907735194 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2927491298920223400, guid: 18427ebb0adc243168945cc710cbe43c,
+    type: 3}
+  m_PrefabInstance: {fileID: 7508320809337362587}
+  m_PrefabAsset: {fileID: 0}
+--- !u!146 &1957650348 stripped
+WheelCollider:
+  m_CorrespondingSourceObject: {fileID: 6451670312446526965, guid: 18427ebb0adc243168945cc710cbe43c,
+    type: 3}
+  m_PrefabInstance: {fileID: 7508320809337362587}
+  m_PrefabAsset: {fileID: 0}
 --- !u!850595691 &2022992451
 LightingSettings:
   m_ObjectHideFlags: 0
@@ -285,7 +396,7 @@ PrefabInstance:
     - target: {fileID: 4263032964952554642, guid: 18427ebb0adc243168945cc710cbe43c,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 3.9875796
+      value: 55.98
       objectReference: {fileID: 0}
     - target: {fileID: 4263032964952554642, guid: 18427ebb0adc243168945cc710cbe43c,
         type: 3}
@@ -324,9 +435,49 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4451317131492201637, guid: 18427ebb0adc243168945cc710cbe43c,
         type: 3}
+      propertyPath: maxTorque
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 4451317131492201637, guid: 18427ebb0adc243168945cc710cbe43c,
+        type: 3}
       propertyPath: motorForce
       value: 50
       objectReference: {fileID: 0}
+    - target: {fileID: 4451317131492201637, guid: 18427ebb0adc243168945cc710cbe43c,
+        type: 3}
+      propertyPath: maxSteeringAngle
+      value: 45
+      objectReference: {fileID: 0}
+    - target: {fileID: 4451317131492201637, guid: 18427ebb0adc243168945cc710cbe43c,
+        type: 3}
+      propertyPath: rearLeftWheelCollider
+      value: 
+      objectReference: {fileID: 680678103}
+    - target: {fileID: 4451317131492201637, guid: 18427ebb0adc243168945cc710cbe43c,
+        type: 3}
+      propertyPath: frontLeftWheelCollider
+      value: 
+      objectReference: {fileID: 998566202}
+    - target: {fileID: 4451317131492201637, guid: 18427ebb0adc243168945cc710cbe43c,
+        type: 3}
+      propertyPath: rearLeftWheelTransform
+      value: 
+      objectReference: {fileID: 1907735194}
+    - target: {fileID: 4451317131492201637, guid: 18427ebb0adc243168945cc710cbe43c,
+        type: 3}
+      propertyPath: rearRightWheelCollider
+      value: 
+      objectReference: {fileID: 1957650348}
+    - target: {fileID: 4451317131492201637, guid: 18427ebb0adc243168945cc710cbe43c,
+        type: 3}
+      propertyPath: frontRightWheelCollider
+      value: 
+      objectReference: {fileID: 1286790756}
+    - target: {fileID: 4451317131492201637, guid: 18427ebb0adc243168945cc710cbe43c,
+        type: 3}
+      propertyPath: rearRightWheelTransform
+      value: 
+      objectReference: {fileID: 517950731}
     - target: {fileID: 4548983109842556574, guid: 18427ebb0adc243168945cc710cbe43c,
         type: 3}
       propertyPath: m_UseGravity
@@ -334,13 +485,34 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4573985354064125928, guid: 18427ebb0adc243168945cc710cbe43c,
         type: 3}
+      propertyPath: m_Model
+      value: 
+      objectReference: {fileID: 5022602860645237092, guid: aad4010d459234ec5bac5e2e3f88b446,
+        type: 3}
+    - target: {fileID: 4573985354064125928, guid: 18427ebb0adc243168945cc710cbe43c,
+        type: 3}
       propertyPath: m_BehaviorType
-      value: 0
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4573985354064125928, guid: 18427ebb0adc243168945cc710cbe43c,
+        type: 3}
+      propertyPath: m_UseChildSensors
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4573985354064125928, guid: 18427ebb0adc243168945cc710cbe43c,
         type: 3}
       propertyPath: m_BrainParameters.VectorObservationSize
-      value: 51
+      value: 244
+      objectReference: {fileID: 0}
+    - target: {fileID: 4573985354064125928, guid: 18427ebb0adc243168945cc710cbe43c,
+        type: 3}
+      propertyPath: m_BrainParameters.NumStackedVectorObservations
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4596749344245396796, guid: 18427ebb0adc243168945cc710cbe43c,
+        type: 3}
+      propertyPath: MaxStep
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4596749344245396796, guid: 18427ebb0adc243168945cc710cbe43c,
         type: 3}
@@ -349,8 +521,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5088424263921947523, guid: 18427ebb0adc243168945cc710cbe43c,
         type: 3}
+      propertyPath: DecisionPeriod
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 5088424263921947523, guid: 18427ebb0adc243168945cc710cbe43c,
+        type: 3}
       propertyPath: TakeActionsBetweenDecisions
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5860457946475672011, guid: 18427ebb0adc243168945cc710cbe43c,
         type: 3}
