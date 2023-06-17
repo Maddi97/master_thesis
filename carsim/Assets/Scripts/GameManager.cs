@@ -19,11 +19,16 @@ public class GameManager : MonoBehaviour
 
 	public int idOfCurrentRun;
 
+	public GameObject JetBot;
+
 	// need to load the prefabs of the obstacles in unity here
 	public GameObject obstacleBlue;
 	public GameObject obstacleRed;
 	public GameObject goalPassedWallCheckpoint;
 	public GameObject goalMissedWallCheckpoint;
+	public GameObject FinishLineCheckpoint;
+	public Boolean IsFinishLine = false;
+	public Boolean RandomJetBotSpawn = true;
 
 
 	// initialize obstacle Map Generator
@@ -56,9 +61,10 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-		Vector3  gameManagerPosition = this.transform.position;
 		// load obstacles
-		this.obstacleMapManager = new ObstacleMapManager(gameManagerPosition, obstacleBlue, obstacleRed, goalPassedWallCheckpoint, goalMissedWallCheckpoint);
+	
+		this.obstacleMapManager = new ObstacleMapManager(this.transform, obstacleBlue, obstacleRed, goalPassedWallCheckpoint, goalMissedWallCheckpoint, this.FinishLineCheckpoint, this.IsFinishLine, this.JetBot, this.RandomJetBotSpawn);
+		this.obstacleMapManager.SpawnJetBot();
 		InitializeMapWithObstacles();
     }
 
@@ -97,10 +103,27 @@ public class GameManager : MonoBehaviour
 
 		// intantiate real objects in unity
 		this.obstacleMapManager.IntantiateObstacles(obstacleList);
+		
 
 		idOfCurrentRun ++;
 
 	}
+
+	public void SpawnJetBot()
+	{
+		this.obstacleMapManager.SpawnJetBot();
+	}
+
+	public Vector3 GetRandomSpawnPosition()
+    {
+		return this.obstacleMapManager.JetBotRandomCoords();
+
+	}
+
+	public Quaternion GetRandomSpawnRotation()
+    {
+		return this.obstacleMapManager.JetBotRandomRotation();
+    }
 
 	public void DestroyObstaclesOnMap()
     {

@@ -8,9 +8,14 @@ using Random = System.Random;
 
 static class Constants
 {
-    public const int MIN_X = 5;
+    public const int X_Map_MIN = 3;
+    public const int X_WIDTH_JETBOT = 3;
+
+    public const int MIN_X = 7;
     public const int MAX_X = 18;
     public const int X_WIDTH = 14;
+
+    //links und rechts vertauscht
 
     public const float LEFTMOST_Z = 10;
     public const float RIGHTMOST_Z = 0f;
@@ -144,20 +149,88 @@ public class ObstacleMapManager : MonoBehaviour
 {
     public List<UnityEngine.Object> obstacles = new List<UnityEngine.Object>();
 
+    private Boolean isFinishLineLastGoal;
+    private Boolean RandomJetBotSpawn;
     private Vector3 gameManagerPosition;
+    private Transform gameManagerTransform;
     private GameObject obstacleBlue;
     private GameObject obstacleRed;
     private GameObject goalPassedGameOjbect;
     private GameObject goalMissedGameObject;
+    private GameObject finishlineCheckpoint;
     private GameObject allGoals;
+    private GameObject JetBot;
+    private double JetBotXSpawn; 
 
-    public ObstacleMapManager(Vector3 gameManagerPosition, GameObject obstacleBlue, GameObject obstacleRed, GameObject goalPassedGameObject, GameObject goalMissedGameObject)
+    public ObstacleMapManager(Transform gameManagerTransform, GameObject obstacleBlue, GameObject obstacleRed, GameObject goalPassedGameObject, GameObject goalMissedGameObject, GameObject finishlineCheckpoint, Boolean isFinishLine, GameObject JetBot, Boolean RandomJetBotSpawn)
     {
-        this.gameManagerPosition = gameManagerPosition;
+        this.gameManagerTransform = gameManagerTransform;
+        this.gameManagerPosition = gameManagerTransform.position;
         this.obstacleBlue = obstacleBlue;
         this.obstacleRed = obstacleRed;
         this.goalPassedGameOjbect = goalPassedGameObject;
         this.goalMissedGameObject = goalMissedGameObject;
+        this.finishlineCheckpoint = finishlineCheckpoint;
+        this.isFinishLineLastGoal = isFinishLine;
+        this.RandomJetBotSpawn = RandomJetBotSpawn;
+
+        this.JetBot = JetBot;
+        
+
+}
+
+    public void SpawnJetBot()
+    {
+        //local goal post coordinaents depend arena position
+        float zLeftMax = (2 + this.gameManagerPosition.z);
+        // left post of goal max 
+        float zRightMax = (this.gameManagerPosition.z + Constants.Z_WIDTH - 2);
+        int minXLocal = (int)(Constants.X_Map_MIN + this.gameManagerPosition.x);
+        int maxXLocal = minXLocal + Constants.X_WIDTH - Constants.MINXDISTANCEGOALS;
+
+        Random rnd = new Random();
+        float zRandomCoord = (float)rnd.NextDouble() * (zRightMax - zLeftMax) + zLeftMax;
+        float xRandomCoord = (float)rnd.NextDouble() * (maxXLocal - minXLocal) + minXLocal;
+        this.JetBotXSpawn = xRandomCoord;
+        Vector3 SpawnPoint = new(xRandomCoord, 1, zRandomCoord);
+
+        GameObject.Instantiate(original:this.JetBot, position:SpawnPoint, rotation: new Quaternion(0,1,0,1), this.gameManagerTransform.parent);
+
+    }
+    public Vector3 JetBotRandomCoords()
+    {
+        //local goal post coordinaents depend arena position
+        float zLeftMax = (2 + this.gameManagerPosition.z);
+        // left post of goal max 
+        float zRightMax = (this.gameManagerPosition.z + Constants.Z_WIDTH - 2);
+        int minXLocal = (int)(Constants.X_Map_MIN + this.gameManagerPosition.x);
+        int maxXLocal = minXLocal + Constants.X_WIDTH - Constants.MINXDISTANCEGOALS;
+
+        Random rnd = new Random();
+        float zRandomCoord = (float)rnd.NextDouble() * (zRightMax - zLeftMax) + zLeftMax;
+        float xRandomCoord = (float)rnd.NextDouble() * (maxXLocal - minXLocal) + minXLocal;
+        Vector3 SpawnPoint = new(xRandomCoord, 1, zRandomCoord);
+        this.JetBotXSpawn = xRandomCoord;
+
+        return SpawnPoint;
+    }
+
+    public Quaternion JetBotRandomRotation()
+    {
+        Quaternion originalQuaternion = new Quaternion(0, 1, 0, 1);
+
+        // Convert to Euler angles
+        Vector3 currentRotation = originalQuaternion.eulerAngles;
+
+        // Generate a random angle between -45 and 45 degrees
+        float randomAngle = UnityEngine.Random.Range(-45f, 45f);
+
+        // Add the random angle to the current rotation
+        Vector3 modifiedRotation = currentRotation + new Vector3(0, randomAngle, 0);
+
+        // Convert back to quaternion
+        Quaternion modifiedQuaternion = Quaternion.Euler(modifiedRotation);
+        return modifiedQuaternion;
     }
 
 
@@ -165,26 +238,47 @@ public class ObstacleMapManager : MonoBehaviour
     {
 
         allGoals = new GameObject(name: "AllGoals");
-
-        foreach (Goal goal in goalList.goals)
+        if (this.isFinishLineLastGoal == true)
         {
-            GameObject goalIntantiatedGameObject = goal.IntantiateGoal(goal, this.goalPassedGameOjbect, this.goalMissedGameObject, this.gameManagerPosition);
-            goalIntantiatedGameObject.transform.SetParent(allGoals.transform);
 
+            foreach (Goal goal in goalList.goals)
+            {
+                GameObject goalIntantiatedGameObject = goal.IntantiateGoal(goal, this.goalPassedGameOjbect, this.goalMissedGameObject, this.gameManagerPosition);
+                goalIntantiatedGameObject.transform.SetParent(allGoals.transform);
+
+            }
+        }
+        else
+        {
+            for (int i = 0; i < goalList.goals.Length -1; i++)
+            {
+
+                Goal goal = goalList.goals[i];
+                GameObject goalInstantiatedGameObject = goal.IntantiateGoal(goal, this.goalPassedGameOjbect, this.goalMissedGameObject, this.gameManagerPosition);
+                goalInstantiatedGameObject.transform.SetParent(allGoals.transform);
+            }
+
+            //make passed checkpoint of last goal to finishLine checkpoint object
+            Goal goalLast = goalList.goals[goalList.goals.Length-1];
+            GameObject goalInstantiatedGameObjectLast = goalLast.IntantiateGoal(goalLast, this.finishlineCheckpoint, this.goalMissedGameObject, this.gameManagerPosition);
+            goalInstantiatedGameObjectLast.transform.SetParent(allGoals.transform);
         }
     }
 
 
     public void DestroyMap()
     {
+        //DestroyImmediate(this.allGoals);
         Destroy(this.allGoals);
+       
+
     }
 
     public void DestroyObstacles()
     {
         for (int i = 0; i < this.obstacles.Count; i++)
         {
-            GameObject.Destroy(this.obstacles[i]);
+            GameObject.DestroyImmediate(this.obstacles[i]);
         }
     }
 
@@ -279,14 +373,23 @@ public class ObstacleMapManager : MonoBehaviour
         int minXLocal = (int)(Constants.MIN_X + this.gameManagerPosition.x);
         int maxXLocal = minXLocal + Constants.X_WIDTH;
 
+        if (this.RandomJetBotSpawn)
+        {
+            //first goal random distance to JetBot
+            minXLocal = (int)(this.JetBotXSpawn + rnd.Next(Constants.MINXDISTANCEGOALS, Constants.MAXXDISTANCEGOALS));
+
+        }
+        else
+        {
+        }
+
         // choose random distance between goals every round
         int xDistanceGoals = 0;
-
         for (int x = minXLocal; x < maxXLocal; x += xDistanceGoals)
         {
             // choose distance to next goal
             xDistanceGoals = rnd.Next(Constants.MINXDISTANCEGOALS, Constants.MAXXDISTANCEGOALS + 1);
-            //choose z-position of left goal post random 
+            // choose z-position of left goal post random 
             float zLeftPost = (float)rnd.NextDouble() * (zRightMax - zLeftMax) + zLeftMax;
 
             Vector3[] coordsGoal = { new Vector3(), new Vector3() };

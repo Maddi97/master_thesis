@@ -1,4 +1,62 @@
 {
+    "KartAgent": {
+        "checkpoints": [
+            {
+                "steps": 34882,
+                "file_path": "results/Test/KartAgent/KartAgent-34882.onnx",
+                "reward": -0.7800650966578516,
+                "creation_time": 1686399233.057881,
+                "auxillary_file_paths": [
+                    "results/Test/KartAgent/KartAgent-34882.pt"
+                ]
+            },
+            {
+                "steps": 41366,
+                "file_path": "results/Test/KartAgent/KartAgent-41366.onnx",
+                "reward": -0.8107693096001943,
+                "creation_time": 1686472927.518084,
+                "auxillary_file_paths": [
+                    "results/Test/KartAgent/KartAgent-41366.pt"
+                ]
+            },
+            {
+                "steps": 42467,
+                "file_path": "results/Test/KartAgent/KartAgent-42467.onnx",
+                "reward": -0.8317700688328061,
+                "creation_time": 1686473458.139313,
+                "auxillary_file_paths": [
+                    "results/Test/KartAgent/KartAgent-42467.pt"
+                ]
+            },
+            {
+                "steps": 499975,
+                "file_path": "results/Test/KartAgent/KartAgent-499975.onnx",
+                "reward": 1.4376280307769775,
+                "creation_time": 1686506242.202762,
+                "auxillary_file_paths": [
+                    "results/Test/KartAgent/KartAgent-499975.pt"
+                ]
+            },
+            {
+                "steps": 559563,
+                "file_path": "results/Test/KartAgent/KartAgent-559563.onnx",
+                "reward": 0.8420340816179911,
+                "creation_time": 1686508797.070577,
+                "auxillary_file_paths": [
+                    "results/Test/KartAgent/KartAgent-559563.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 559563,
+            "file_path": "results/Test/KartAgent.onnx",
+            "reward": 0.8420340816179911,
+            "creation_time": 1686508797.070577,
+            "auxillary_file_paths": [
+                "results/Test/KartAgent/KartAgent-559563.pt"
+            ]
+        }
+    },
     "metadata": {
         "stats_format_version": "0.3.0",
         "mlagents_version": "0.30.0",

@@ -37,7 +37,7 @@ behaviors:
     init_path: null
     keep_checkpoints: 5
     checkpoint_interval: 500000
-    max_steps: 10000000
+    max_steps: 3000000
     time_horizon: 128
     summary_freq: 1024
     threaded: false
@@ -66,8 +66,8 @@ checkpoint_settings:
   run_id: Test
   initialize_from: null
   load_model: false
-  resume: false
-  force: true
+  resume: true
+  force: false
   train_model: false
   inference: false
   results_dir: results

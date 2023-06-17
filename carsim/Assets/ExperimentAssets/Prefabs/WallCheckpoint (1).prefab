@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1360279434440516620}
   - component: {fileID: 6427547629857193638}
   - component: {fileID: 5700741673364315797}
-  m_Layer: 8
+  m_Layer: 10
   m_Name: WallCheckpoint (1)
   m_TagString: Wall
   m_Icon: {fileID: 0}

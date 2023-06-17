@@ -43,7 +43,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_BackGroundColor: {r: 0.938044, g: 1, b: 0.9009434, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -315,7 +315,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BrainParameters:
-    VectorObservationSize: 244
+    VectorObservationSize: 48
     NumStackedVectorObservations: 1
     m_ActionSpec:
       m_NumContinuousActions: 2
@@ -324,10 +324,10 @@ MonoBehaviour:
     VectorActionDescriptions: []
     VectorActionSpaceType: 1
     hasUpgradedBrainParametersWithActionSpec: 1
-  m_Model: {fileID: 5022602860645237092, guid: c01ae66e5661d442b9891d3ec9eea4eb, type: 3}
+  m_Model: {fileID: 0}
   m_InferenceDevice: 0
-  m_BehaviorType: 2
-  m_BehaviorName: My Behavior
+  m_BehaviorType: 1
+  m_BehaviorName: KartAgent
   TeamId: 0
   m_UseChildSensors: 1
   m_UseChildActuators: 1
@@ -347,9 +347,9 @@ MonoBehaviour:
   agentParameters:
     maxStep: 0
   hasUpgradedFromAgentParameters: 1
-  MaxStep: 100
+  MaxStep: 0
   drivingEngine: {fileID: 6193760820542181969}
-  TimeLeft: 10
+  TimeLeft: 50
   t: 0
 --- !u!114 &3364011995377030519
 MonoBehaviour:
@@ -978,14 +978,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxTorque: 100
   maxSteeringAngle: 30
-  frontLeftWheelCollider: {fileID: 0}
-  frontRightWheelCollider: {fileID: 0}
-  rearLeftWheelCollider: {fileID: 0}
-  rearRightWheelCollider: {fileID: 0}
+  frontLeftWheelCollider: {fileID: 1919713468229280084}
+  frontRightWheelCollider: {fileID: 9050088764276208563}
+  rearLeftWheelCollider: {fileID: 1490915295485531174}
+  rearRightWheelCollider: {fileID: 3583183092813988609}
   frontLeftWheelTransform: {fileID: 845723055580789616}
   frontRightWheeTransform: {fileID: 3620777261944593728}
-  rearLeftWheelTransform: {fileID: 0}
-  rearRightWheelTransform: {fileID: 0}
+  rearLeftWheelTransform: {fileID: 4652887114675770460}
+  rearRightWheelTransform: {fileID: 4572069554671827839}
   carBody: {fileID: 2879654619789689899}
 --- !u!1 &7065269662725542962
 GameObject:

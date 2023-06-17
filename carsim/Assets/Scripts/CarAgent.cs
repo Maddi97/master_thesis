@@ -23,6 +23,7 @@ public class CarAgent : Agent
     private SpawnManager spawnManager;
     private int resWidth = 512;
     private int resHeight = 256;
+
     private GameObject finishLine;
     private GameManager gameManager;
     private int numberOfObstaclesPerType = 4;
@@ -33,7 +34,6 @@ public class CarAgent : Agent
     {
         this.imagePreprocess = new ImageRecognitionPipeline();
         this.cam = gameObject.GetComponentInChildren<Camera>();
-        this.finishLine = GameObject.FindGameObjectWithTag("FinishCheckpoint");
         this.gameManager = transform.parent.gameObject.GetComponentInChildren<GameManager>();
         //get spawn manager
         this.spawnManager = transform.parent.gameObject.GetComponentInChildren<SpawnManager>();
@@ -44,11 +44,20 @@ public class CarAgent : Agent
     public override void OnEpisodeBegin()
     {
         this.t = 0f;
+
+        //if heuristic
+        //this.gameManager = transform.parent.gameObject.GetComponentInChildren<GameManager>();
+
         //on every restart clear map and load map again
+
         this.gameManager.DestroyObstaclesOnMap();
-        this.gameManager.InitializeMapWithObstacles();
-        this.rememberObstaclePositions = this.InitializeObstacleMemory();
         this.Respawn();
+
+        this.gameManager.InitializeMapWithObstacles();
+
+        //Instead destroy verschieben -> Car Agent hat alle wichtigen sachen kann nicht destroyd werden
+        //this.gameManager.SpawnJetBot();
+        this.rememberObstaclePositions = this.InitializeObstacleMemory();
     }
 
     public void FixedUpdate()
@@ -62,19 +71,20 @@ public class CarAgent : Agent
 
         float velo = this.drivingEngine.getCarVelocity();
 
-        Debug.Log(velo);
-        //this.AddReward(distanceReward * Time.deltaTime);
-        if(velo > 0)
+        //Debug.Log(velo);
+       // this.AddReward(distanceReward * Time.deltaTime);
+        if (velo > 0)
         {
-            this.AddReward((velo / 20f ) * Time.deltaTime);
+            this.AddReward((velo / 10f) * Time.deltaTime);
 
         }
         //Debug.Log(this.t);
         //this.AddReward(-0.01f * Time.deltaTime);
         if (this.t >= this.TimeLeft)
         {
+            this.AddReward(-1f);
             this.EndEpisode();
-            UnityEngine.Debug.Log("Ended episode because of time");
+            //UnityEngine.Debug.Log("Ended episode because of time");
 
         }
     }
@@ -90,7 +100,9 @@ public class CarAgent : Agent
         //var debugObservations = this.GetObservations();
 
         // after very action add 1 / distance to finishline as reward
-        float distance = Vector3.Distance(this.gameObject.transform.localPosition, this.finishLine.transform.localPosition);
+        if(this.finishLine != null) {
+            float distance = Vector3.Distance(this.gameObject.transform.localPosition, this.finishLine.transform.localPosition);
+        }
         //print("Distance: " + distance);
         //this.AddReward(-1 * (distance/100));
 
@@ -107,23 +119,23 @@ public class CarAgent : Agent
 
         this.rememberObstaclePositions = this.imagePreprocess.TraceObstcalePosition(obstaclePositions, this.rememberObstaclePositions);
         // add speed input
-        sensor.AddObservation(this.drivingEngine.getCarVelocity());
+       // sensor.AddObservation(this.drivingEngine.getCarVelocity());
 
         //add actual rotation of object x is up and down
 
         //TODO check if local rotation true for every car
-        sensor.AddObservation(this.transform.localEulerAngles.y);
-        sensor.AddObservation(this.transform.localEulerAngles.z);
+       // sensor.AddObservation(this.transform.localEulerAngles.y);
+        //sensor.AddObservation(this.transform.localEulerAngles.z);
 
 
         //add actual steering
-        sensor.AddObservation(this.drivingEngine.getSteeringAngle());
+        //sensor.AddObservation(this.drivingEngine.getSteeringAngle());
 
         //only add current observed obstacles without memory
-        //this.AddObstacleObservationWithoutMemory(sensor, obstaclePositions);
+        this.AddObstacleObservationWithoutMemory(sensor, obstaclePositions);
 
         // add with memory
-        this.AddObstaclePositionsWithMemory(sensor, this.rememberObstaclePositions);
+        //this.AddObstaclePositionsWithMemory(sensor, this.rememberObstaclePositions);
        
     }
 
@@ -151,14 +163,29 @@ public class CarAgent : Agent
 
     public void Respawn()
     {
-        Rigidbody theRB = this.gameObject.GetComponentInChildren<Rigidbody>();
-        Vector3 pos = spawnManager.SelectRandomSpawnpoint().localPosition;
-        Quaternion spawnRotation = spawnManager.SelectRandomSpawnpoint().localRotation;
-        theRB.MovePosition(pos);
-        theRB.MoveRotation(spawnRotation);
-        transform.localRotation = spawnRotation;
-        transform.localPosition = pos - new Vector3(0, 0.4f, 0);
-        this.drivingEngine.ResetMotor();
+        if (false)
+        {
+            Rigidbody theRB = this.gameObject.GetComponentInChildren<Rigidbody>();
+            Vector3 pos = spawnManager.SelectRandomSpawnpoint().localPosition;
+            Quaternion spawnRotation = spawnManager.SelectRandomSpawnpoint().localRotation;
+            theRB.MovePosition(pos);
+            theRB.MoveRotation(spawnRotation);
+            transform.localRotation = spawnRotation;
+            transform.localPosition = pos - new Vector3(0, 0.4f, 0);
+            this.drivingEngine.ResetMotor();
+        }
+        else
+        {
+            Rigidbody theRB = this.gameObject.GetComponentInChildren<Rigidbody>();
+            Vector3 pos = this.gameManager.GetRandomSpawnPosition();
+            // Quaternion spawnRotation = spawnManager.SelectRandomSpawnpoint().localRotation;
+            Quaternion spawnRotation = this.gameManager.GetRandomSpawnRotation();
+            theRB.MovePosition(pos);
+            theRB.MoveRotation(spawnRotation);
+            transform.localRotation = spawnRotation;
+            transform.position = pos;
+            this.drivingEngine.ResetMotor();
+        }
     }
 
 
