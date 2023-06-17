@@ -150,7 +150,7 @@ public class ObstacleMapManager : MonoBehaviour
     public List<UnityEngine.Object> obstacles = new List<UnityEngine.Object>();
 
     private Boolean isFinishLineLastGoal;
-    private Boolean RandomJetBotSpawn;
+    private Boolean isTrainingSpawnRandom;
     private Vector3 gameManagerPosition;
     private Transform gameManagerTransform;
     private GameObject obstacleBlue;
@@ -162,7 +162,7 @@ public class ObstacleMapManager : MonoBehaviour
     private GameObject JetBot;
     private double JetBotXSpawn; 
 
-    public ObstacleMapManager(Transform gameManagerTransform, GameObject obstacleBlue, GameObject obstacleRed, GameObject goalPassedGameObject, GameObject goalMissedGameObject, GameObject finishlineCheckpoint, Boolean isFinishLine, GameObject JetBot, Boolean RandomJetBotSpawn)
+    public ObstacleMapManager(Transform gameManagerTransform, GameObject obstacleBlue, GameObject obstacleRed, GameObject goalPassedGameObject, GameObject goalMissedGameObject, GameObject finishlineCheckpoint, Boolean isFinishLine, GameObject JetBot, Boolean isTrainingSpawnRandom)
     {
         this.gameManagerTransform = gameManagerTransform;
         this.gameManagerPosition = gameManagerTransform.position;
@@ -172,8 +172,7 @@ public class ObstacleMapManager : MonoBehaviour
         this.goalMissedGameObject = goalMissedGameObject;
         this.finishlineCheckpoint = finishlineCheckpoint;
         this.isFinishLineLastGoal = isFinishLine;
-        this.RandomJetBotSpawn = RandomJetBotSpawn;
-
+        this.isTrainingSpawnRandom = isTrainingSpawnRandom;
         this.JetBot = JetBot;
         
 
@@ -181,23 +180,31 @@ public class ObstacleMapManager : MonoBehaviour
 
     public void SpawnJetBot()
     {
-        //local goal post coordinaents depend arena position
-        float zLeftMax = (2 + this.gameManagerPosition.z);
-        // left post of goal max 
-        float zRightMax = (this.gameManagerPosition.z + Constants.Z_WIDTH - 2);
-        int minXLocal = (int)(Constants.X_Map_MIN + this.gameManagerPosition.x);
-        int maxXLocal = minXLocal + Constants.X_WIDTH - Constants.MINXDISTANCEGOALS;
-
-        Random rnd = new Random();
-        float zRandomCoord = (float)rnd.NextDouble() * (zRightMax - zLeftMax) + zLeftMax;
-        float xRandomCoord = (float)rnd.NextDouble() * (maxXLocal - minXLocal) + minXLocal;
-        this.JetBotXSpawn = xRandomCoord;
-        Vector3 SpawnPoint = new(xRandomCoord, 1, zRandomCoord);
+        Vector3 SpawnPoint;
+        if (this.isTrainingSpawnRandom)
+        {
+            SpawnPoint = this.GetJetBotRandomCoords();
+        }
+       else
+        {
+            SpawnPoint = this.GetJetBotSpawnCoords();
+        }
 
         GameObject.Instantiate(original:this.JetBot, position:SpawnPoint, rotation: new Quaternion(0,1,0,1), this.gameManagerTransform.parent);
 
     }
-    public Vector3 JetBotRandomCoords()
+    public Vector3 GetJetBotSpawnCoords()
+    {
+
+        int minXLocal = (int)(Constants.X_Map_MIN + this.gameManagerPosition.x);
+        int z = (int)(this.gameManagerPosition.z + Constants.Z_WIDTH / 2);
+        Vector3 SpawnPoint = new(minXLocal, 1, z);
+
+
+        return SpawnPoint;
+    }
+
+    public Vector3 GetJetBotRandomCoords()
     {
         //local goal post coordinaents depend arena position
         float zLeftMax = (2 + this.gameManagerPosition.z);
@@ -238,7 +245,7 @@ public class ObstacleMapManager : MonoBehaviour
     {
 
         allGoals = new GameObject(name: "AllGoals");
-        if (this.isFinishLineLastGoal == true)
+        if (this.isFinishLineLastGoal == false)
         {
 
             foreach (Goal goal in goalList.goals)
@@ -373,7 +380,7 @@ public class ObstacleMapManager : MonoBehaviour
         int minXLocal = (int)(Constants.MIN_X + this.gameManagerPosition.x);
         int maxXLocal = minXLocal + Constants.X_WIDTH;
 
-        if (this.RandomJetBotSpawn)
+        if (this.isTrainingSpawnRandom)
         {
             //first goal random distance to JetBot
             minXLocal = (int)(this.JetBotXSpawn + rnd.Next(Constants.MINXDISTANCEGOALS, Constants.MAXXDISTANCEGOALS));

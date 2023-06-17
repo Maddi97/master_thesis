@@ -20,7 +20,6 @@ public class CarAgent : Agent
 
     private ImageRecognitionPipeline imagePreprocess;
     private Camera cam;
-    private SpawnManager spawnManager;
     private int resWidth = 512;
     private int resHeight = 256;
 
@@ -36,7 +35,6 @@ public class CarAgent : Agent
         this.cam = gameObject.GetComponentInChildren<Camera>();
         this.gameManager = transform.parent.gameObject.GetComponentInChildren<GameManager>();
         //get spawn manager
-        this.spawnManager = transform.parent.gameObject.GetComponentInChildren<SpawnManager>();
         //this.gameManager.InitializeMapWithObstacles();
         this.rememberObstaclePositions = this.InitializeObstacleMemory();
     }
@@ -163,17 +161,19 @@ public class CarAgent : Agent
 
     public void Respawn()
     {
-        if (false)
+        // if not spawn random, vehicle is respawnd at start of the map
+        if (this.gameManager.GetIsTrainingSpawnRandom() == false)
         {
             Rigidbody theRB = this.gameObject.GetComponentInChildren<Rigidbody>();
-            Vector3 pos = spawnManager.SelectRandomSpawnpoint().localPosition;
-            Quaternion spawnRotation = spawnManager.SelectRandomSpawnpoint().localRotation;
+            Vector3 pos = this.gameManager.GetStartSpawnPosition();
+            Quaternion spawnRotation = Quaternion.Euler(0, 90, 0);
             theRB.MovePosition(pos);
             theRB.MoveRotation(spawnRotation);
             transform.localRotation = spawnRotation;
-            transform.localPosition = pos - new Vector3(0, 0.4f, 0);
+            transform.position = pos;
             this.drivingEngine.ResetMotor();
         }
+        //else vehicle is randomly spawn
         else
         {
             Rigidbody theRB = this.gameObject.GetComponentInChildren<Rigidbody>();

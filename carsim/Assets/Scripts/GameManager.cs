@@ -27,9 +27,12 @@ public class GameManager : MonoBehaviour
 	public GameObject goalPassedWallCheckpoint;
 	public GameObject goalMissedWallCheckpoint;
 	public GameObject FinishLineCheckpoint;
-	public Boolean IsFinishLine = false;
-	public Boolean RandomJetBotSpawn = true;
 
+	//spawn jetbot random on map if trainnig
+	public Boolean isTrainingSpawnRandom = true;
+
+	// has the last goal the finish line?
+	public Boolean isFinishLineLastGoal = true;
 
 	// initialize obstacle Map Generator
 	private ObstacleMapManager obstacleMapManager;
@@ -49,8 +52,6 @@ public class GameManager : MonoBehaviour
 	public string saveObstacleMapFilePath = ".";
 
 
-	private SpawnManager spawnManager;
-
 	//to store result
 	private int result;
 
@@ -63,7 +64,7 @@ public class GameManager : MonoBehaviour
     {
 		// load obstacles
 	
-		this.obstacleMapManager = new ObstacleMapManager(this.transform, obstacleBlue, obstacleRed, goalPassedWallCheckpoint, goalMissedWallCheckpoint, this.FinishLineCheckpoint, this.IsFinishLine, this.JetBot, this.RandomJetBotSpawn);
+		this.obstacleMapManager = new ObstacleMapManager(this.transform, obstacleBlue, obstacleRed, goalPassedWallCheckpoint, goalMissedWallCheckpoint, this.FinishLineCheckpoint, this.isFinishLineLastGoal, this.JetBot, this.isTrainingSpawnRandom);
 		this.obstacleMapManager.SpawnJetBot();
 		InitializeMapWithObstacles();
     }
@@ -109,14 +110,16 @@ public class GameManager : MonoBehaviour
 
 	}
 
-	public void SpawnJetBot()
-	{
-		this.obstacleMapManager.SpawnJetBot();
-	}
+	//retuns coords at beginning of the map (start point)
+	public Vector3 GetStartSpawnPosition()
+    {
+		return this.obstacleMapManager.GetJetBotSpawnCoords();
+    }
 
+	//returns random spawn position on map
 	public Vector3 GetRandomSpawnPosition()
     {
-		return this.obstacleMapManager.JetBotRandomCoords();
+		return this.obstacleMapManager.GetJetBotRandomCoords();
 
 	}
 
@@ -129,5 +132,9 @@ public class GameManager : MonoBehaviour
     {
 		this.obstacleMapManager.DestroyMap();
     }
-	
+	public Boolean GetIsTrainingSpawnRandom()
+    {
+		return this.isTrainingSpawnRandom;
+
+	}
 }
