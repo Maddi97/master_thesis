@@ -123,6 +123,24 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &27875707 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8849627625933155724, guid: 18427ebb0adc243168945cc710cbe43c,
+    type: 3}
+  m_PrefabInstance: {fileID: 7508320809337362587}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &27875712
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 27875707}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3980d86b1c1845bc8650735cf931ff9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!146 &121188466 stripped
 WheelCollider:
   m_CorrespondingSourceObject: {fileID: 1561260566926718279, guid: 18427ebb0adc243168945cc710cbe43c,
@@ -761,6 +779,24 @@ WheelCollider:
     type: 3}
   m_PrefabInstance: {fileID: 1988167353}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1807614264 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8849627625562322356, guid: 18427ebb0adc243168945cc710cbe43c,
+    type: 3}
+  m_PrefabInstance: {fileID: 7508320809337362587}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1807614271
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1807614264}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3980d86b1c1845bc8650735cf931ff9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &1907735194 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2927491298920223400, guid: 18427ebb0adc243168945cc710cbe43c,
@@ -1610,6 +1646,16 @@ PrefabInstance:
         type: 3}
     - target: {fileID: 7508320808693513669, guid: 18427ebb0adc243168945cc710cbe43c,
         type: 3}
+      propertyPath: isLogTraining
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7508320808693513669, guid: 18427ebb0adc243168945cc710cbe43c,
+        type: 3}
+      propertyPath: logTrainingPath
+      value: /results
+      objectReference: {fileID: 0}
+    - target: {fileID: 7508320808693513669, guid: 18427ebb0adc243168945cc710cbe43c,
+        type: 3}
       propertyPath: mapTypeGeneratedMap
       value: 0
       objectReference: {fileID: 0}
@@ -1702,4 +1748,6 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 7508320808147264325, guid: 18427ebb0adc243168945cc710cbe43c, type: 3}
     - {fileID: 7508320808399121762, guid: 18427ebb0adc243168945cc710cbe43c, type: 3}
+    - {fileID: 7510090718507439313, guid: 18427ebb0adc243168945cc710cbe43c, type: 3}
+    - {fileID: 1448748732693104575, guid: 18427ebb0adc243168945cc710cbe43c, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 18427ebb0adc243168945cc710cbe43c, type: 3}

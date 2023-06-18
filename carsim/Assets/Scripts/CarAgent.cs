@@ -6,6 +6,8 @@ using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Sensors;
 using System;
 using System.IO;
+using System.Diagnostics;
+using System.Linq;
 
 public class CarAgent : Agent
 {
@@ -28,7 +30,12 @@ public class CarAgent : Agent
     private int numberOfObstaclesPerType = 4;
     private int numberMemoryTraces = 5;
     private List<List<List<Vector4>>> rememberObstaclePositions;
-    
+
+    //for data frame
+    private List<double> velocities = new List<double>();
+    private DataFrameManager df = new DataFrameManager();
+
+
     public override void Initialize()
     {
         this.imagePreprocess = new ImageRecognitionPipeline();
@@ -37,6 +44,7 @@ public class CarAgent : Agent
         //get spawn manager
         //this.gameManager.InitializeMapWithObstacles();
         this.rememberObstaclePositions = this.InitializeObstacleMemory();
+        df.SaveToCsv("./test.csv"); 
     }
 
     public override void OnEpisodeBegin()
@@ -56,6 +64,19 @@ public class CarAgent : Agent
         //Instead destroy verschieben -> Car Agent hat alle wichtigen sachen kann nicht destroyd werden
         //this.gameManager.SpawnJetBot();
         this.rememberObstaclePositions = this.InitializeObstacleMemory();
+
+    }
+
+    public void OnEpisodeEnd(string endEvent)
+    {
+        if (gameManager.isLogTraining)
+        {
+            string filename = "training_results.csv";
+            this.df.AppendRow(this.CompletedEpisodes, this.GetCumulativeReward(), endEvent, this.velocities.Average());
+
+            this.df.SaveToCsv(this.gameManager.logTrainingPath + "/" + filename);
+        }
+        this.EndEpisode();
     }
 
     public void FixedUpdate()
@@ -68,7 +89,7 @@ public class CarAgent : Agent
         //float distanceReward = 1 / distance;
 
         float velo = this.drivingEngine.getCarVelocity();
-
+        this.velocities.Add(velo);
         //Debug.Log(velo);
        // this.AddReward(distanceReward * Time.deltaTime);
         if (velo > 0)
@@ -81,7 +102,9 @@ public class CarAgent : Agent
         if (this.t >= this.TimeLeft)
         {
             this.AddReward(-1f);
-            this.EndEpisode();
+
+            string endEvent = "outOfTime";
+            this.OnEpisodeEnd(endEvent);
             //UnityEngine.Debug.Log("Ended episode because of time");
 
         }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -18,16 +19,18 @@ public class CheckpointManager : MonoBehaviour
 
         if (other.tag == "BlueObstacleTag")
         {
-            //Debug.Log("Hit blue obstace");
+            //Debug.Log("Hit blue obstace
             this.carAgent.AddReward(-1f);
-            this.carAgent.EndEpisode();
+            string endEvent = "blueObstacle";
+            this.carAgent.OnEpisodeEnd(endEvent);
 
         }
         if (other.tag == "RedObstacleTag")
         {
             //Debug.Log("Hit red obstace");
             this.carAgent.AddReward(-1f);
-            this.carAgent.EndEpisode();
+            string endEvent = "blueObstacle";
+            this.carAgent.OnEpisodeEnd(endEvent);
 
         }
         if (other.tag == "GoalPassed")
@@ -38,7 +41,9 @@ public class CheckpointManager : MonoBehaviour
             this.carAgent.AddReward(1f);
             // remove checkpoint wall gameobject to not hit it twice
             Destroy(other.gameObject);
-            this.carAgent.EndEpisode();
+
+            string endEvent = "firstBlueGoal";
+            this.carAgent.OnEpisodeEnd(endEvent);
 
         }
         if(other.tag == "GoalMissed")
@@ -46,19 +51,26 @@ public class CheckpointManager : MonoBehaviour
             //Debug.Log("Missed goal punishment");
             this.carAgent.AddReward(-1f);
             this.carAgent.EndEpisode();
+
+            string endEvent = "goalMissed";
+            this.carAgent.OnEpisodeEnd(endEvent);
+
         }
         if (other.tag == "Wall")
         {
             //Debug.Log("Wall punishment");
             this.carAgent.AddReward(-1f);
             this.carAgent.EndEpisode();
+            string endEvent = "wall";
+            this.carAgent.OnEpisodeEnd(endEvent);
 
         }
         if(other.tag == "FinishCheckpoint")
         {
             //Debug.Log("Reward for finishing");
             this.carAgent.AddReward(1f);
-            this.carAgent.EndEpisode();
+            string endEvent = "completeMap";
+            this.carAgent.OnEpisodeEnd(endEvent);
         }
 
     }

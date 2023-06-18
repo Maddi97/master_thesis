@@ -58,6 +58,10 @@ public class GameManager : MonoBehaviour
 	//  
 	public bool humanPilot = true;
 
+	// log in training
+	public Boolean isLogTraining = true;
+	public string logTrainingPath = "./results/";
+
 	
     // Start is called before the first frame update
     void Start()
