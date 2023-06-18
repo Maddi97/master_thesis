@@ -34,7 +34,8 @@ public class CarAgent : Agent
     //for data frame
     private List<double> velocities = new List<double>();
     private DataFrameManager df = new DataFrameManager();
-
+    private int steps;
+    private Stopwatch stopwatch = new Stopwatch();
 
     public override void Initialize()
     {
@@ -44,13 +45,15 @@ public class CarAgent : Agent
         //get spawn manager
         //this.gameManager.InitializeMapWithObstacles();
         this.rememberObstaclePositions = this.InitializeObstacleMemory();
-        df.SaveToCsv("./test.csv"); 
     }
 
     public override void OnEpisodeBegin()
     {
         this.t = 0f;
 
+        this.steps = 0;
+        this.stopwatch.Reset();
+        this.stopwatch.Start();
         //if heuristic
         //this.gameManager = transform.parent.gameObject.GetComponentInChildren<GameManager>();
 
@@ -69,10 +72,12 @@ public class CarAgent : Agent
 
     public void OnEpisodeEnd(string endEvent)
     {
+        this.stopwatch.Stop();
+
         if (gameManager.isLogTraining)
         {
             string filename = "training_results.csv";
-            this.df.AppendRow(this.CompletedEpisodes, this.GetCumulativeReward(), endEvent, this.velocities.Average());
+            this.df.AppendRow(this.CompletedEpisodes, this.GetCumulativeReward(), endEvent, this.velocities.Average(), this.steps, this.stopwatch.Elapsed.TotalSeconds);
 
             this.df.SaveToCsv(this.gameManager.logTrainingPath + "/" + filename);
         }
@@ -133,6 +138,7 @@ public class CarAgent : Agent
     //Collecting extra Information that isn't picked up by the RaycastSensors
     public override void CollectObservations(VectorSensor sensor)
     {
+        this.steps = this.steps + 1;
 
         Byte[] cameraPicture = this.GetCameraInput();
         //this.imagePreprocess.saveImageToPath(cameraPicture, "camPic.png");

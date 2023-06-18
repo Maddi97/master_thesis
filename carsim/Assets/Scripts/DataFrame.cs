@@ -20,13 +20,17 @@ public class DataFrameManager
         dt.Columns.Add("reward", typeof(double));
         dt.Columns.Add("endEvent", typeof(string));
         dt.Columns.Add("velocity", typeof(double));
+        dt.Columns.Add("steps", typeof(int));
+        dt.Columns.Add("time", typeof(double));
+
+
 
     }
 
-    public void AppendRow(int episodeNr, double reward, string endEvent, double velocity)
+    public void AppendRow(int episodeNr, double reward, string endEvent, double velocity, int steps, double time)
     {
         // Add a new row to the DataTable
-        dt.Rows.Add(episodeNr, reward, endEvent, velocity);
+        dt.Rows.Add(episodeNr, reward, endEvent, velocity, steps, time);
     }
 
     public DataTable GetDataTable()
