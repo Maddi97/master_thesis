@@ -10,9 +10,9 @@ public class AIEngine : MonoBehaviour
     private float inputAccelerationRight;
     private float currentSteerAngle;
 
-    public float maxTorque = 100f;
-    public float maxSteeringAngle = 45f;
-
+    private float maxTorque = 100f;
+    private float maxSteeringAngle = 75f;
+    private float resistanceFactor = 1f;
 
     public WheelCollider frontLeftWheelCollider;
     public WheelCollider frontRightWheelCollider;
@@ -35,7 +35,11 @@ public class AIEngine : MonoBehaviour
     }
     public void SetInput(List<float> input)
     {
-        //TODO vertauscht
+        // + - 10 %
+        this.inputAccelerationLeft = (float)(input[1]);
+        this.inputAccelerationRight = (float) (input[0]);
+
+        // normal input
         this.inputAccelerationLeft = input[1];
         this.inputAccelerationRight = input[0];
     }
@@ -44,8 +48,9 @@ public class AIEngine : MonoBehaviour
     {
         //resistance slows down car when not accelarating
         // grows with velocity + (signed in direction of vel) constant
-
-        float resistance = (this.getCarVelocity() * 10f) + Math.Sign(this.getCarVelocity()) * 15f;
+        // custome resistance if wanted actually set to 0
+    
+        float resistance = (float) (0f * (Math.Pow(this.getCarVelocity(), 8) * Math.Sign(this.getCarVelocity()) * this.resistanceFactor) + Math.Sign(this.getCarVelocity())*5f);
 
 
         //frontLeftWheelCollider.motorTorque = (inputAccelerationLeft * motorForce) - resistance;
@@ -53,7 +58,7 @@ public class AIEngine : MonoBehaviour
 
 
         // Calculate steering angle for each wheel based on difference in acceleration
-        float accelerationDiff = Math.Abs(this.inputAccelerationRight) - Math.Abs( this.inputAccelerationLeft);
+        float accelerationDiff = Math.Abs(this.inputAccelerationRight) - Math.Abs(this.inputAccelerationLeft);
         float steeringAngle = maxSteeringAngle * accelerationDiff;
  
         // Apply differential torque to the wheels based on steering angle
@@ -61,11 +66,11 @@ public class AIEngine : MonoBehaviour
         //rightTorque *= 1 + differentialFactor * Mathf.Abs(steeringAngle);
 
         // Apply torque and steering angle to the left wheel
-        frontLeftWheelCollider.motorTorque = (inputAccelerationLeft * this.maxTorque) - resistance; ;
+        frontLeftWheelCollider.motorTorque = (inputAccelerationLeft * this.maxTorque);
         frontLeftWheelCollider.steerAngle = steeringAngle;
 
         // Apply torque and steering angle to the right wheel
-        frontRightWheelCollider.motorTorque = (inputAccelerationRight * this.maxTorque) - resistance;
+        frontRightWheelCollider.motorTorque = (inputAccelerationRight * this.maxTorque);
         frontRightWheelCollider.steerAngle = steeringAngle;
 
     }

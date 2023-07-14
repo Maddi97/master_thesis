@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class CheckpointManager : MonoBehaviour
 {
-
     private CarAgent carAgent;
     // Start is called before the first frame update
     void Start()
@@ -29,7 +28,7 @@ public class CheckpointManager : MonoBehaviour
         {
             //Debug.Log("Hit red obstace");
             this.carAgent.AddReward(-1f);
-            string endEvent = "blueObstacle";
+            string endEvent = "redObstacle";
             this.carAgent.OnEpisodeEnd(endEvent);
 
         }
@@ -37,20 +36,20 @@ public class CheckpointManager : MonoBehaviour
         {
             //Debug.Log("Passed goal reward");
             //this.carAgent.AddReward(100 / (this.carAgent.getTime()));
-             this.carAgent.AddTime(10f);
+            this.carAgent.AddTime(10f);
             this.carAgent.AddReward(1f);
             // remove checkpoint wall gameobject to not hit it twice
             Destroy(other.gameObject);
 
-            string endEvent = "firstBlueGoal";
-            this.carAgent.OnEpisodeEnd(endEvent);
+            string endEvent = "goalPassed";
+            this.carAgent.IncreasePassedGoals();
+            //this.carAgent.OnEpisodeEnd(endEvent);
 
         }
         if(other.tag == "GoalMissed")
         {
             //Debug.Log("Missed goal punishment");
             this.carAgent.AddReward(-1f);
-            this.carAgent.EndEpisode();
 
             string endEvent = "goalMissed";
             this.carAgent.OnEpisodeEnd(endEvent);
@@ -60,7 +59,7 @@ public class CheckpointManager : MonoBehaviour
         {
             //Debug.Log("Wall punishment");
             this.carAgent.AddReward(-1f);
-            this.carAgent.EndEpisode();
+            //this.carAgent.EndEpisode();
             string endEvent = "wall";
             this.carAgent.OnEpisodeEnd(endEvent);
 
@@ -68,8 +67,10 @@ public class CheckpointManager : MonoBehaviour
         if(other.tag == "FinishCheckpoint")
         {
             //Debug.Log("Reward for finishing");
-            this.carAgent.AddReward(1f);
+            this.carAgent.AddReward(100f);
             string endEvent = "completeMap";
+            this.carAgent.IncreasePassedGoals();
+
             this.carAgent.OnEpisodeEnd(endEvent);
         }
 

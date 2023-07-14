@@ -10,23 +10,71 @@ using System.Text;
 public class DataFrameManager
 {
     private DataTable dt;
-
-    public DataFrameManager()
+    private string filePath;
+    private int episodeNr;
+    public DataFrameManager(string filePath, Boolean isEvaluation)
     {
+        this.filePath = filePath;
+        this.episodeNr = 0;
         // Initialize the DataTable with column names but no rows
         dt = new DataTable();
+        if (!isEvaluation)
+        {
+            dt.Columns.Add("episodeNr", typeof(int));
+            dt.Columns.Add("reward", typeof(double));
+            dt.Columns.Add("endEvent", typeof(string));
+            dt.Columns.Add("velocity", typeof(double));
+            dt.Columns.Add("steps", typeof(int));
+            dt.Columns.Add("time", typeof(double));
 
-        dt.Columns.Add("episodeNr", typeof(int));
-        dt.Columns.Add("reward", typeof(double));
-        dt.Columns.Add("endEvent", typeof(string));
-        dt.Columns.Add("velocity", typeof(double));
+            if (File.Exists(filePath))
+            {
+                using (StreamReader sr = new StreamReader(filePath))
+                {
+                    // Skip the header line
+                    sr.ReadLine();
 
-    }
+                    while (!sr.EndOfStream)
+                    {
+                        string[] rows = sr.ReadLine().Split(',');
 
-    public void AppendRow(int episodeNr, double reward, string endEvent, double velocity)
+                        DataRow dr = dt.NewRow();
+                        dr["episodeNr"] = Int32.Parse(rows[0]);
+                        dr["reward"] = Double.Parse(rows[1]);
+                        dr["endEvent"] = rows[2];
+                        dr["velocity"] = Double.Parse(rows[3]);
+                        dr["steps"] = Int32.Parse(rows[4]);
+                        dr["time"] = Double.Parse(rows[5]);
+                        this.episodeNr = Int32.Parse(rows[0]);
+                        dt.Rows.Add(dr);
+                    }
+                }
+            }
+        }
+
+        else
+        {
+
+                dt.Columns.Add("map", typeof(string));
+                dt.Columns.Add("run", typeof(int));
+                dt.Columns.Add("endEvent", typeof(string));
+            dt.Columns.Add("passedGoals", typeof(int));
+                dt.Columns.Add("velocity", typeof(double));
+                dt.Columns.Add("steps", typeof(int));
+                dt.Columns.Add("time", typeof(double));
+        }
+
+}
+
+    public void AppendRowTraining(int episodeNr, double reward, string endEvent, double velocity, int steps, double time)
     {
         // Add a new row to the DataTable
-        dt.Rows.Add(episodeNr, reward, endEvent, velocity);
+        this.episodeNr = this.episodeNr + 1;
+        this.dt.Rows.Add(this.episodeNr, reward, endEvent, velocity, steps, time);
+    }
+    public void AppendRowEvaluation(string map, int run, string endEvent, int passedGoals, double velocity, int steps, double time)
+    {
+        this.dt.Rows.Add(map, run, endEvent, passedGoals, velocity, steps, time);
     }
 
     public DataTable GetDataTable()
@@ -34,9 +82,14 @@ public class DataFrameManager
         return dt;
     }
 
-    public void SaveToCsv(string filePath)
+    public int GetEpisodeNr()
     {
-        using (StreamWriter sw = new StreamWriter(filePath))
+        return this.episodeNr;
+    }
+    public void SaveToCsv()
+    {
+      
+        using (StreamWriter sw = new StreamWriter(this.filePath))
         {
             foreach (DataColumn column in dt.Columns)
             {

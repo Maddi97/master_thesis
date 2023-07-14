@@ -1,5 +1,9 @@
+results/*
+Timers/*
+
 **/*.DS_Store
 .DS_Store
 .idea
 **/*mono_crash*
-**/results
+carsim/ml-agents/results
+analysis/training_performance/venv

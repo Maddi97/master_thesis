@@ -33,7 +33,11 @@ public class CarAgent : Agent
 
     //for data frame
     private List<double> velocities = new List<double>();
-    private DataFrameManager df = new DataFrameManager();
+    private DataFrameManager df;
+    private int steps;
+    private Stopwatch stopwatch = new Stopwatch();
+
+    private int passedGoals;
 
 
     public override void Initialize()
@@ -41,16 +45,19 @@ public class CarAgent : Agent
         this.imagePreprocess = new ImageRecognitionPipeline();
         this.cam = gameObject.GetComponentInChildren<Camera>();
         this.gameManager = transform.parent.gameObject.GetComponentInChildren<GameManager>();
+        this.df = new DataFrameManager(this.gameManager.resultsPath, this.gameManager.isEvaluation);
         //get spawn manager
         //this.gameManager.InitializeMapWithObstacles();
         this.rememberObstaclePositions = this.InitializeObstacleMemory();
-        df.SaveToCsv("./test.csv"); 
     }
 
     public override void OnEpisodeBegin()
     {
         this.t = 0f;
-
+        this.passedGoals = 0;
+        this.steps = 0;
+        this.stopwatch.Reset();
+        this.stopwatch.Start();
         //if heuristic
         //this.gameManager = transform.parent.gameObject.GetComponentInChildren<GameManager>();
 
@@ -59,7 +66,7 @@ public class CarAgent : Agent
         this.gameManager.DestroyObstaclesOnMap();
         this.Respawn();
 
-        this.gameManager.InitializeMapWithObstacles();
+        this.gameManager.InitializeMapWithObstacles(true);
 
         //Instead destroy verschieben -> Car Agent hat alle wichtigen sachen kann nicht destroyd werden
         //this.gameManager.SpawnJetBot();
@@ -69,12 +76,23 @@ public class CarAgent : Agent
 
     public void OnEpisodeEnd(string endEvent)
     {
+        this.stopwatch.Stop();
+
         if (gameManager.isLogTraining)
         {
-            string filename = "training_results.csv";
-            this.df.AppendRow(this.CompletedEpisodes, this.GetCumulativeReward(), endEvent, this.velocities.Average());
+            this.df.AppendRowTraining(this.CompletedEpisodes, this.GetCumulativeReward(), endEvent, this.velocities.Average(), this.steps, this.stopwatch.Elapsed.TotalSeconds);
+            //save csv every 1000 episodes
+            if(this.df.GetEpisodeNr() % 1000 == 0)
+            {
+                this.df.SaveToCsv();
+            }
+        }
+        else if (gameManager.isEvaluation)
+        {
+            this.df.AppendRowEvaluation(this.gameManager.GetMapTypeName(), this.gameManager.GetIdOfCurrentRun(), endEvent, this.passedGoals, this.velocities.Average(), this.steps, this.stopwatch.Elapsed.TotalSeconds);
+            this.df.SaveToCsv();
 
-            this.df.SaveToCsv(this.gameManager.logTrainingPath + "/" + filename);
+
         }
         this.EndEpisode();
     }
@@ -113,7 +131,10 @@ public class CarAgent : Agent
     public override void OnActionReceived(ActionBuffers actions)
     {
         var actionInputFromNN = actions.ContinuousActions;
-        List<float> input = new List<float>() { actionInputFromNN[0], actionInputFromNN[1] };
+
+        float additionalMotorpower = 1.2f;
+
+        List<float> input = new List<float>() { actionInputFromNN[0]* additionalMotorpower, actionInputFromNN[1]* additionalMotorpower };
 
         //print("NN Input: [" + input[0] + ", " + input[1] + "]");
 
@@ -133,6 +154,7 @@ public class CarAgent : Agent
     //Collecting extra Information that isn't picked up by the RaycastSensors
     public override void CollectObservations(VectorSensor sensor)
     {
+        this.steps = this.steps + 1;
 
         Byte[] cameraPicture = this.GetCameraInput();
         //this.imagePreprocess.saveImageToPath(cameraPicture, "camPic.png");
@@ -144,19 +166,15 @@ public class CarAgent : Agent
 
         //add actual rotation of object x is up and down
 
-        //TODO check if local rotation true for every car
-       // sensor.AddObservation(this.transform.localEulerAngles.y);
-        //sensor.AddObservation(this.transform.localEulerAngles.z);
-
-
         //add actual steering
         //sensor.AddObservation(this.drivingEngine.getSteeringAngle());
 
         //only add current observed obstacles without memory
-        this.AddObstacleObservationWithoutMemory(sensor, obstaclePositions);
+        //this.AddObstacleObservationWithoutMemory(sensor, obstaclePositions);
 
+        //TODO if statemant with variable
         // add with memory
-        //this.AddObstaclePositionsWithMemory(sensor, this.rememberObstaclePositions);
+        this.AddObstaclePositionsWithMemory(sensor, this.rememberObstaclePositions);
        
     }
 
@@ -299,5 +317,10 @@ public class CarAgent : Agent
     public float getTime()
     {
         return this.t;
+    }
+
+    public void IncreasePassedGoals()
+    {
+        this.passedGoals++;
     }
 }

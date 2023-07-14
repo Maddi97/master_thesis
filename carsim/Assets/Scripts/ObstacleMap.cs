@@ -21,7 +21,7 @@ static class Constants
     public const float RIGHTMOST_Z = 0f;
     public const float Z_WIDTH = 10.5f;
 
-    public const float SPAWNHEIGHT_Y = 1.2f;
+    public const float SPAWNHEIGHT_Y = 1f;
     public const float MINWIDTH_GOAL = 2;
     public const float MAXWIDTH_GOAL = 4;
     public const int MINXDISTANCEGOALS = 4;
@@ -34,10 +34,18 @@ public enum MapType
     random,
     easyGoalLaneMiddleBlueFirst,
     easyGoalLaneMiddleRedFirst,
-    twoGoalLanesBlueFirstLeft,
-    twoGoalLanesBlueFirstRight,
-    twoGoalLanesRedFirstLeft,
-    twoGoalLanesRedFirstRight,
+
+    twoGoalLanesBlueFirstLeftMedium,
+    twoGoalLanesBlueFirstRightMedium,
+    twoGoalLanesRedFirstLeftMedium,
+    twoGoalLanesRedFirstRightMedium,
+
+
+    twoGoalLanesBlueFirstLeftHard,
+    twoGoalLanesBlueFirstRightHard,
+    twoGoalLanesRedFirstLeftHard,
+    twoGoalLanesRedFirstRightHard,
+
 
 }
 public class Goal
@@ -160,7 +168,7 @@ public class ObstacleMapManager : MonoBehaviour
     private GameObject finishlineCheckpoint;
     private GameObject allGoals;
     private GameObject JetBot;
-    private double JetBotXSpawn; 
+    private double JetBotXSpawn;
 
     public ObstacleMapManager(Transform gameManagerTransform, GameObject obstacleBlue, GameObject obstacleRed, GameObject goalPassedGameObject, GameObject goalMissedGameObject, GameObject finishlineCheckpoint, Boolean isFinishLine, GameObject JetBot, Boolean isTrainingSpawnRandom)
     {
@@ -333,20 +341,40 @@ public class ObstacleMapManager : MonoBehaviour
                 obstacles = this.GenerateEasyGoalLaneMiddleMap(false);
                 //Debug.Log("Easy middle lane with red obstacles first map generated");
                 break;
-            case MapType.twoGoalLanesBlueFirstLeft:
-                obstacles = this.GenerateTwoGoalLanesMap(true, true);
+
+
+            case MapType.twoGoalLanesBlueFirstLeftMedium:
+                obstacles = this.GenerateTwoGoalLanesMapMedium(true, true);
                 //Debug.Log("Two lanes map with blue obstacles first generated");
                 break;
-            case MapType.twoGoalLanesBlueFirstRight:
-                obstacles = this.GenerateTwoGoalLanesMap(true, false);
+            case MapType.twoGoalLanesBlueFirstRightMedium:
+                obstacles = this.GenerateTwoGoalLanesMapMedium(true, false);
                 Debug.Log("Two lanes map with blue obstacles first generated");
                 break;
-            case MapType.twoGoalLanesRedFirstLeft:
-                obstacles = this.GenerateTwoGoalLanesMap(false, true);
+            case MapType.twoGoalLanesRedFirstLeftMedium:
+                obstacles = this.GenerateTwoGoalLanesMapMedium(false, true);
                 Debug.Log("Two lanes map with red obstacles first generated");
                 break;
-            case MapType.twoGoalLanesRedFirstRight:
-                obstacles = this.GenerateTwoGoalLanesMap(false, false);
+            case MapType.twoGoalLanesRedFirstRightMedium:
+                obstacles = this.GenerateTwoGoalLanesMapMedium(false, false);
+                Debug.Log("Two lanes map with red obstacles first generated");
+                break;
+
+
+            case MapType.twoGoalLanesBlueFirstLeftHard:
+                obstacles = this.GenerateTwoGoalLanesMapHard(true, true);
+                //Debug.Log("Two lanes map with blue obstacles first generated");
+                break;
+            case MapType.twoGoalLanesBlueFirstRightHard:
+                obstacles = this.GenerateTwoGoalLanesMapHard(true, false);
+                Debug.Log("Two lanes map with blue obstacles first generated");
+                break;
+            case MapType.twoGoalLanesRedFirstLeftHard:
+                obstacles = this.GenerateTwoGoalLanesMapHard(false, true);
+                Debug.Log("Two lanes map with red obstacles first generated");
+                break;
+            case MapType.twoGoalLanesRedFirstRightHard:
+                obstacles = this.GenerateTwoGoalLanesMapHard(false, false);
                 Debug.Log("Two lanes map with red obstacles first generated");
                 break;
             }
@@ -376,7 +404,7 @@ public class ObstacleMapManager : MonoBehaviour
         //local goal post coordinaents depend arena position
         float zLeftMax = (1 + this.gameManagerPosition.z);
         // left post of goal max 
-        float zRightMax = (this.gameManagerPosition.z + Constants.Z_WIDTH - Constants.MAXWIDTH_GOAL);
+        float zRightMax = (5.5f + this.gameManagerPosition.z);
         int minXLocal = (int)(Constants.MIN_X + this.gameManagerPosition.x);
         int maxXLocal = minXLocal + Constants.X_WIDTH;
 
@@ -431,7 +459,7 @@ public class ObstacleMapManager : MonoBehaviour
         float zLeftRow = (Constants.Z_WIDTH/2 + this.gameManagerPosition.z - Constants.MAXWIDTH_GOAL/2);
 
         int minXLocal = (int)(Constants.MIN_X + this.gameManagerPosition.x);
-        int maxXLocal = minXLocal + Constants.X_WIDTH;
+        int maxXLocal = minXLocal + Constants.X_WIDTH - 2;
         GameObject actualColorObject;
 
         if (isBlueFirst)
@@ -444,7 +472,7 @@ public class ObstacleMapManager : MonoBehaviour
         }
 
 
-        for (int x = minXLocal; x < maxXLocal ; x += Constants.MINXDISTANCEGOALS)
+        for (int x = minXLocal; x < maxXLocal ; x += Constants.MINXDISTANCEGOALS +1)
         {
 
             // left obstacles of goals
@@ -467,7 +495,7 @@ public class ObstacleMapManager : MonoBehaviour
 
     }
 
-    private Goal[] GenerateTwoGoalLanesMap(Boolean isBlueFirst=true, Boolean isLeftFirst=true)
+    private Goal[] GenerateTwoGoalLanesMapHard(Boolean isBlueFirst=true, Boolean isLeftFirst=true)
     {
 
         List<Goal> obstacles = new List<Goal>();
@@ -484,13 +512,13 @@ public class ObstacleMapManager : MonoBehaviour
         bool left = isLeftFirst;
 
         //local goal post coordinaents depend arena position
-        float zLeftRow = (1 + this.gameManagerPosition.z);
-        float zRightRow = (5 + this.gameManagerPosition.z);
+        float zLeftRow = (1.5f + this.gameManagerPosition.z);
+        float zRightRow = (5f + this.gameManagerPosition.z);
         int minXLocal = (int)(Constants.MIN_X + this.gameManagerPosition.x);
-        int maxXLocal = minXLocal + Constants.X_WIDTH;
+        int maxXLocal = minXLocal + Constants.X_WIDTH -2;
 
 
-        for (int x = minXLocal; x < maxXLocal; x += Constants.MINXDISTANCEGOALS)
+        for (int x = minXLocal; x < maxXLocal; x += Constants.MAXXDISTANCEGOALS - 1)
         {
             Vector3[] coordsGoal = { new Vector3(), new Vector3() };
 
@@ -526,5 +554,68 @@ public class ObstacleMapManager : MonoBehaviour
 
 
             return obstacles.ToArray() ;
+    }
+
+    private Goal[] GenerateTwoGoalLanesMapMedium(Boolean isBlueFirst = true, Boolean isLeftFirst = true)
+    {
+
+        List<Goal> obstacles = new List<Goal>();
+
+        GameObject actualColorObject;
+        if (isBlueFirst)
+        {
+            actualColorObject = this.obstacleBlue;
+        }
+        else
+        {
+            actualColorObject = this.obstacleRed;
+        }
+
+        bool left = isLeftFirst;
+
+        //local goal post coordinaents depend arena position
+        float zLeftRow = (2.5f + this.gameManagerPosition.z);
+        float zRightRow = (4f + this.gameManagerPosition.z);
+        int minXLocal = (int)(Constants.MIN_X + this.gameManagerPosition.x);
+        int maxXLocal = minXLocal + Constants.X_WIDTH - 2;
+
+
+        for (int x = minXLocal; x < maxXLocal; x += Constants.MAXXDISTANCEGOALS - 1)
+        {
+            Vector3[] coordsGoal = { new Vector3(), new Vector3() };
+
+            //goal on left side
+            if (left)
+            {
+                Vector3 coordLeft = new Vector3(x, Constants.SPAWNHEIGHT_Y, zRightRow);
+
+                Vector3 coordRight = new Vector3(x, Constants.SPAWNHEIGHT_Y, zRightRow + Constants.MAXWIDTH_GOAL);
+
+                coordsGoal[0] = coordLeft;
+                coordsGoal[1] = coordRight;
+
+            }
+            else
+            {
+                Vector3 coordLeft = new Vector3(x, Constants.SPAWNHEIGHT_Y, zLeftRow);
+
+                Vector3 coordRight = new Vector3(x, Constants.SPAWNHEIGHT_Y, zLeftRow + Constants.MAXWIDTH_GOAL);
+
+                coordsGoal[0] = coordLeft;
+                coordsGoal[1] = coordRight;
+                
+            }
+
+            Goal goal = new Goal(actualColorObject, coordsGoal, this.goalPassedGameOjbect, this.goalMissedGameObject);
+            obstacles.Add(goal);
+
+            left = left == true ? false : true;
+            actualColorObject = actualColorObject == obstacleBlue ? obstacleRed : obstacleBlue;
+        }
+
+
+
+
+        return obstacles.ToArray();
     }
 }

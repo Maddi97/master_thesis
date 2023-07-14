@@ -261,7 +261,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1360888143983817536}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 1, y: 0.1, z: 5}
   m_LocalScale: {x: 0.2, y: 0.2, z: 0.2}
   m_ConstrainProportionsScale: 0
@@ -283,8 +283,8 @@ Rigidbody:
   m_GameObject: {fileID: 1360888143983817536}
   serializedVersion: 2
   m_Mass: 500
-  m_Drag: 0
-  m_AngularDrag: 0.05
+  m_Drag: 1.5
+  m_AngularDrag: 0.005
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
@@ -315,7 +315,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BrainParameters:
-    VectorObservationSize: 48
+    VectorObservationSize: 240
     NumStackedVectorObservations: 1
     m_ActionSpec:
       m_NumContinuousActions: 2
@@ -349,7 +349,7 @@ MonoBehaviour:
   hasUpgradedFromAgentParameters: 1
   MaxStep: 0
   drivingEngine: {fileID: 6193760820542181969}
-  TimeLeft: 8
+  TimeLeft: 10
   t: 0
 --- !u!114 &3364011995377030519
 MonoBehaviour:
@@ -522,8 +522,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1.0593145, y: 2.3514428, z: 0.9897068}
-  m_Center: {x: 0.027016075, y: 1.2645025, z: 0.00352669}
+  m_Size: {x: 1.1030345, y: 0.8297256, z: 0.9897068}
+  m_Center: {x: -0.0015555823, y: 0.39252022, z: 0.00352669}
 --- !u!1 &1820396897042963941
 GameObject:
   m_ObjectHideFlags: 0
@@ -976,8 +976,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb828afde3bb540709e3a2c81dba42a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxTorque: 100
-  maxSteeringAngle: 30
   frontLeftWheelCollider: {fileID: 1919713468229280084}
   frontRightWheelCollider: {fileID: 9050088764276208563}
   rearLeftWheelCollider: {fileID: 1490915295485531174}

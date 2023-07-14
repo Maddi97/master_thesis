@@ -11,10 +11,10 @@ public class ImageRecognitionPipeline
 
     //veriables for debugging
     String debugPicturePath = "debugPictures/";
-    Boolean saveContours = false;
+    Boolean saveContours = true;
 
-    Boolean saveHsvImage = false;
-    Boolean saveDecodedImage = false;
+    Boolean saveHsvImage = true;
+    Boolean saveDecodedImage = true;
     // find contours of all red, blue obstacles and boundery in image                           h
     public List<List<Rectangle>> getObstaclePosition(byte[] image)
     {
