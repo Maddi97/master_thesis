@@ -15,6 +15,9 @@ public class CarAgent : Agent
 
     public AIEngine drivingEngine;
     private bool debugSavePictures = false;
+    public bool hasMemory;
+    public int saveAfterNSteps;
+    public float additionalMotorpower = 1f;
 
     // for debugging its public, then you can lift the TimeLimit in unity
     public float TimeLeft = 10f;
@@ -45,7 +48,10 @@ public class CarAgent : Agent
         this.imagePreprocess = new ImageRecognitionPipeline();
         this.cam = gameObject.GetComponentInChildren<Camera>();
         this.gameManager = transform.parent.gameObject.GetComponentInChildren<GameManager>();
-        this.df = new DataFrameManager(this.gameManager.resultsPath, this.gameManager.isEvaluation);
+        if (this.gameManager.isLogTraining || this.gameManager.isEvaluation)
+        {
+            this.df = new DataFrameManager(this.gameManager.resultsPath, this.gameManager.isEvaluation);
+        }
         //get spawn manager
         //this.gameManager.InitializeMapWithObstacles();
         this.rememberObstaclePositions = this.InitializeObstacleMemory();
@@ -82,7 +88,7 @@ public class CarAgent : Agent
         {
             this.df.AppendRowTraining(this.CompletedEpisodes, this.GetCumulativeReward(), endEvent, this.velocities.Average(), this.steps, this.stopwatch.Elapsed.TotalSeconds);
             //save csv every 1000 episodes
-            if(this.df.GetEpisodeNr() % 1000 == 0)
+            if(this.df.GetEpisodeNr() % this.saveAfterNSteps == 0)
             {
                 this.df.SaveToCsv();
             }
@@ -131,13 +137,10 @@ public class CarAgent : Agent
     public override void OnActionReceived(ActionBuffers actions)
     {
         var actionInputFromNN = actions.ContinuousActions;
-
-        float additionalMotorpower = 1.2f;
-
         List<float> input = new List<float>() { actionInputFromNN[0]* additionalMotorpower, actionInputFromNN[1]* additionalMotorpower };
 
         //print("NN Input: [" + input[0] + ", " + input[1] + "]");
-
+        //print(input);
         this.drivingEngine.SetInput(input);
         //var debugObservations = this.GetObservations();
 
@@ -169,13 +172,19 @@ public class CarAgent : Agent
         //add actual steering
         //sensor.AddObservation(this.drivingEngine.getSteeringAngle());
 
-        //only add current observed obstacles without memory
-        //this.AddObstacleObservationWithoutMemory(sensor, obstaclePositions);
-
-        //TODO if statemant with variable
         // add with memory
-        this.AddObstaclePositionsWithMemory(sensor, this.rememberObstaclePositions);
-       
+        if (this.hasMemory)
+        {
+            // observation size is 240
+            this.AddObstaclePositionsWithMemory(sensor, this.rememberObstaclePositions);
+        }
+        else
+        {
+            //observation size is 48
+            //only add current observed obstacles without memory
+            this.AddObstacleObservationWithoutMemory(sensor, obstaclePositions);
+        }
+
     }
 
     //Get the AI vehicles camera input encode as byte array

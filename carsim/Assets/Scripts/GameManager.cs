@@ -30,7 +30,8 @@ public class GameManager : MonoBehaviour
 	public GameObject FinishLineCheckpoint;
 
 	//spawn jetbot random on map if trainnig
-	public Boolean isTrainingSpawnRandom ;
+	public Boolean isTrainingSpawnRandom;
+	public bool singleGoalTraining;
 
 	// has the last goal the finish line?
 	public Boolean isFinishLineLastGoal = true;
@@ -82,15 +83,15 @@ public class GameManager : MonoBehaviour
 	void Start()
     {
 		// load obstacles
-		this.isEvaluation = !isLogTraining;
-		if(this.isLogTraining == false)
+		this.isEvaluation = !isTrainingSpawnRandom;
+		if(this.isTrainingSpawnRandom == false)
         {
 			isTrainingSpawnRandom = false;
 			isLogTraining = false;
 			
 
 		}
-		this.obstacleMapManager = new ObstacleMapManager(this.transform, obstacleBlue, obstacleRed, goalPassedWallCheckpoint, goalMissedWallCheckpoint, this.FinishLineCheckpoint, this.isFinishLineLastGoal, this.JetBot, this.isTrainingSpawnRandom);
+		this.obstacleMapManager = new ObstacleMapManager(this.transform, obstacleBlue, obstacleRed, goalPassedWallCheckpoint, goalMissedWallCheckpoint, this.FinishLineCheckpoint, this.isFinishLineLastGoal, this.JetBot, this.isTrainingSpawnRandom, this.singleGoalTraining);
 		this.obstacleMapManager.SpawnJetBot();
 		//InitializeMapWithObstacles();
     }

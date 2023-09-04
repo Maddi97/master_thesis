@@ -1,0 +1,65 @@
+{
+    "KartAgent": {
+        "checkpoints": [
+            {
+                "steps": 1999997,
+                "file_path": "results/PPO-SGT-BASIC-Experiment-Reward-1/KartAgent/KartAgent-1999997.onnx",
+                "reward": 0.8744601458311081,
+                "creation_time": 1687582153.064523,
+                "auxillary_file_paths": [
+                    "results/PPO-SGT-BASIC-Experiment-Reward-1/KartAgent/KartAgent-1999997.pt"
+                ]
+            },
+            {
+                "steps": 2499996,
+                "file_path": "results/PPO-SGT-BASIC-Experiment-Reward-1/KartAgent/KartAgent-2499996.onnx",
+                "reward": 1.111280273932677,
+                "creation_time": 1687601221.096243,
+                "auxillary_file_paths": [
+                    "results/PPO-SGT-BASIC-Experiment-Reward-1/KartAgent/KartAgent-2499996.pt"
+                ]
+            },
+            {
+                "steps": 2999990,
+                "file_path": "results/PPO-SGT-BASIC-Experiment-Reward-1/KartAgent/KartAgent-2999990.onnx",
+                "reward": 1.1364220171063035,
+                "creation_time": 1687620970.924157,
+                "auxillary_file_paths": [
+                    "results/PPO-SGT-BASIC-Experiment-Reward-1/KartAgent/KartAgent-2999990.pt"
+                ]
+            },
+            {
+                "steps": 3000008,
+                "file_path": "results/PPO-SGT-BASIC-Experiment-Reward-1/KartAgent/KartAgent-3000008.onnx",
+                "reward": 1.1404812888665632,
+                "creation_time": 1687620970.978952,
+                "auxillary_file_paths": [
+                    "results/PPO-SGT-BASIC-Experiment-Reward-1/KartAgent/KartAgent-3000008.pt"
+                ]
+            },
+            {
+                "steps": 3000192,
+                "file_path": "results/PPO-SGT-BASIC-Experiment-Reward-1/KartAgent/KartAgent-3000192.onnx",
+                "reward": -0.3835670607430594,
+                "creation_time": 1693407624.6418188,
+                "auxillary_file_paths": [
+                    "results/PPO-SGT-BASIC-Experiment-Reward-1/KartAgent/KartAgent-3000192.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 3000192,
+            "file_path": "results/PPO-SGT-BASIC-Experiment-Reward-1/KartAgent.onnx",
+            "reward": -0.3835670607430594,
+            "creation_time": 1693407624.6418188,
+            "auxillary_file_paths": [
+                "results/PPO-SGT-BASIC-Experiment-Reward-1/KartAgent/KartAgent-3000192.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.30.0",
+        "torch_version": "1.8.1"
+    }
+}

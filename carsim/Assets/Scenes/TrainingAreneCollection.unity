@@ -548,12 +548,12 @@ PrefabInstance:
     - target: {fileID: 7508320808693513669, guid: 18427ebb0adc243168945cc710cbe43c,
         type: 3}
       propertyPath: resultsPath
-      value: ./results/test.csv
+      value: ./results_unity/test_run_1.csv
       objectReference: {fileID: 0}
     - target: {fileID: 7508320808693513669, guid: 18427ebb0adc243168945cc710cbe43c,
         type: 3}
       propertyPath: isEvaluation
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7508320808693513669, guid: 18427ebb0adc243168945cc710cbe43c,
         type: 3}
@@ -568,12 +568,17 @@ PrefabInstance:
     - target: {fileID: 7508320808693513669, guid: 18427ebb0adc243168945cc710cbe43c,
         type: 3}
       propertyPath: numberOfRunsPerMap
-      value: 100
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7508320808693513669, guid: 18427ebb0adc243168945cc710cbe43c,
+        type: 3}
+      propertyPath: singleGoalTraining
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7508320808693513669, guid: 18427ebb0adc243168945cc710cbe43c,
         type: 3}
       propertyPath: mapTypeGeneratedMap
-      value: 6
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7508320808693513669, guid: 18427ebb0adc243168945cc710cbe43c,
         type: 3}
@@ -581,6 +586,11 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 5933175081230500892, guid: 56c03fe3b32714087834dbd01bb96404,
         type: 3}
+    - target: {fileID: 7508320808693513669, guid: 18427ebb0adc243168945cc710cbe43c,
+        type: 3}
+      propertyPath: isFinishLineLastGoal
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7508320808693513669, guid: 18427ebb0adc243168945cc710cbe43c,
         type: 3}
       propertyPath: isTrainingSpawnRandom
@@ -614,7 +624,7 @@ PrefabInstance:
     - target: {fileID: 7508320808693513669, guid: 18427ebb0adc243168945cc710cbe43c,
         type: 3}
       propertyPath: evaluationMaps.Array.data[4]
-      value: 8
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 7508320808693513669, guid: 18427ebb0adc243168945cc710cbe43c,
         type: 3}

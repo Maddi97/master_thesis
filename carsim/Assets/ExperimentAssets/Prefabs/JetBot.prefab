@@ -326,8 +326,8 @@ MonoBehaviour:
     hasUpgradedBrainParametersWithActionSpec: 1
   m_Model: {fileID: 5022602860645237092, guid: 6283545ac273d429293b676f4ee9bbc7, type: 3}
   m_InferenceDevice: 0
-  m_BehaviorType: 2
-  m_BehaviorName: KartAgent
+  m_BehaviorType: 0
+  m_BehaviorName: Agent
   TeamId: 0
   m_UseChildSensors: 1
   m_UseChildActuators: 1
@@ -349,7 +349,10 @@ MonoBehaviour:
   hasUpgradedFromAgentParameters: 1
   MaxStep: 0
   drivingEngine: {fileID: 6193760820542181969}
-  TimeLeft: 10
+  hasMemory: 1
+  saveAfterNSteps: 1000
+  additionalMotorpower: 1
+  TimeLeft: 20
   t: 0
 --- !u!114 &3364011995377030519
 MonoBehaviour:

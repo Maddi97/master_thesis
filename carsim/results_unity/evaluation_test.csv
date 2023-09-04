@@ -1,0 +1,4 @@
+map,run,endEvent,passedGoals,velocity,steps,time,
+easyGoalLaneMiddleBlueFirst,0,blueObstacle,2,0.525105341040886,136,29.0369087
+easyGoalLaneMiddleRedFirst,0,blueObstacle,1,0.528939593991526,81,16.0360389
+twoGoalLanesBlueFirstRightMedium,0,blueObstacle,0,0.509890154038751,41,8.2781731

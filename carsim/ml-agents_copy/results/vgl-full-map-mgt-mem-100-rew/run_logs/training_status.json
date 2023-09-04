@@ -1,0 +1,65 @@
+{
+    "KartAgent": {
+        "checkpoints": [
+            {
+                "steps": 1567012,
+                "file_path": "results/PPO-MGT-MEM-run-0-complete-map-reward-100/KartAgent/KartAgent-1567012.onnx",
+                "reward": 55.5645714727315,
+                "creation_time": 1687200064.6626291,
+                "auxillary_file_paths": [
+                    "results/PPO-MGT-MEM-run-0-complete-map-reward-100/KartAgent/KartAgent-1567012.pt"
+                ]
+            },
+            {
+                "steps": 1567157,
+                "file_path": "results/PPO-MGT-MEM-run-0-complete-map-reward-100/KartAgent/KartAgent-1567157.onnx",
+                "reward": -0.27997441589832306,
+                "creation_time": 1687200165.9007308,
+                "auxillary_file_paths": [
+                    "results/PPO-MGT-MEM-run-0-complete-map-reward-100/KartAgent/KartAgent-1567157.pt"
+                ]
+            },
+            {
+                "steps": 1999956,
+                "file_path": "results/PPO-MGT-MEM-run-0-complete-map-reward-100/KartAgent/KartAgent-1999956.onnx",
+                "reward": 62.74092920937321,
+                "creation_time": 1687215585.38984,
+                "auxillary_file_paths": [
+                    "results/PPO-MGT-MEM-run-0-complete-map-reward-100/KartAgent/KartAgent-1999956.pt"
+                ]
+            },
+            {
+                "steps": 2499994,
+                "file_path": "results/PPO-MGT-MEM-run-0-complete-map-reward-100/KartAgent/KartAgent-2499994.onnx",
+                "reward": 51.24329183995724,
+                "creation_time": 1687235782.4414248,
+                "auxillary_file_paths": [
+                    "results/PPO-MGT-MEM-run-0-complete-map-reward-100/KartAgent/KartAgent-2499994.pt"
+                ]
+            },
+            {
+                "steps": 2619961,
+                "file_path": "results/PPO-MGT-MEM-run-0-complete-map-reward-100/KartAgent/KartAgent-2619961.onnx",
+                "reward": 76.66925977170467,
+                "creation_time": 1687241047.750002,
+                "auxillary_file_paths": [
+                    "results/PPO-MGT-MEM-run-0-complete-map-reward-100/KartAgent/KartAgent-2619961.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 2619961,
+            "file_path": "results/PPO-MGT-MEM-run-0-complete-map-reward-100/KartAgent.onnx",
+            "reward": 76.66925977170467,
+            "creation_time": 1687241047.750002,
+            "auxillary_file_paths": [
+                "results/PPO-MGT-MEM-run-0-complete-map-reward-100/KartAgent/KartAgent-2619961.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.30.0",
+        "torch_version": "1.8.1"
+    }
+}

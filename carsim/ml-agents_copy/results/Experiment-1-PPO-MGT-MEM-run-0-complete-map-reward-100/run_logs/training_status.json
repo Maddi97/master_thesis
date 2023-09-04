@@ -1,0 +1,47 @@
+{
+    "KartAgent": {
+        "checkpoints": [
+            {
+                "steps": 2999973,
+                "file_path": "results/Experiment-1-PPO-MGT-MEM-run-0-complete-map-reward-100/KartAgent/KartAgent-2999973.onnx",
+                "reward": 10.669725282324684,
+                "creation_time": 1693408988.4462678,
+                "auxillary_file_paths": [
+                    "results/Experiment-1-PPO-MGT-MEM-run-0-complete-map-reward-100/KartAgent/KartAgent-2999973.pt"
+                ]
+            },
+            {
+                "steps": 0,
+                "file_path": "results/Experiment-1-PPO-MGT-MEM-run-0-complete-map-reward-100/KartAgent/KartAgent-0.onnx",
+                "reward": null,
+                "creation_time": 1693409792.350362,
+                "auxillary_file_paths": [
+                    "results/Experiment-1-PPO-MGT-MEM-run-0-complete-map-reward-100/KartAgent/KartAgent-0.pt"
+                ]
+            },
+            {
+                "steps": 1251,
+                "file_path": "results/Experiment-1-PPO-MGT-MEM-run-0-complete-map-reward-100/KartAgent/KartAgent-1251.onnx",
+                "reward": -0.9364194830258687,
+                "creation_time": 1693409940.579187,
+                "auxillary_file_paths": [
+                    "results/Experiment-1-PPO-MGT-MEM-run-0-complete-map-reward-100/KartAgent/KartAgent-1251.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 1251,
+            "file_path": "results/Experiment-1-PPO-MGT-MEM-run-0-complete-map-reward-100/KartAgent.onnx",
+            "reward": -0.9364194830258687,
+            "creation_time": 1693409940.579187,
+            "auxillary_file_paths": [
+                "results/Experiment-1-PPO-MGT-MEM-run-0-complete-map-reward-100/KartAgent/KartAgent-1251.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.30.0",
+        "torch_version": "1.8.1"
+    }
+}

@@ -1,0 +1,8 @@
+map,run,endEvent,passedGoals,velocity,steps,time,
+twoGoalLanesRedFirstRightMedium,1,redObstacle,1,0.682115957684761,42,9.0870071
+twoGoalLanesRedFirstRightMedium,0,redObstacle,0,0.621859185230196,30,5.9828075
+twoGoalLanesBlueFirstLeftMedium,1,completeMap,3,0.67205486742954,96,19.1965065
+twoGoalLanesBlueFirstLeftMedium,0,completeMap,3,0.685571202723684,97,19.292527
+twoGoalLanesBlueFirstRightMedium,1,completeMap,3,0.688204646163593,101,20.1551344
+twoGoalLanesBlueFirstRightMedium,0,blueObstacle,2,0.693546607873598,95,18.9961601
+twoGoalLanesRedFirstLeftMedium,1,completeMap,3,0.69793804399616,100,20.020801
